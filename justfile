@@ -8,7 +8,7 @@ docs-clean:
     rm -rf docs/build
 
 docs-serve: docs
-    cd docs/build && python3 -m http.server 8000 & open http://localhost:8000
+    cd docs/build && python3 -m http.server 8000
 
 lint:
     uv run ruff check .
