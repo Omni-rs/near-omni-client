@@ -1,3 +1,7 @@
+setup-dev:
+	uv sync --all-extras --dev
+	uv pip install -e .
+
 test:
     uv run pytest
 
