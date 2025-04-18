@@ -72,9 +72,7 @@ class JsonProvider(object):
         most_frequent = counter.most_common(1)[0][0]
         return most_frequent
 
-    async def call_rpc_request(
-        self, method, params, broadcast=False, threshold: int = 0
-    ):
+    async def call_rpc_request(self, method, params, broadcast=False, threshold: int = 0):
         j = {"method": method, "params": params, "id": "dontcare", "jsonrpc": "2.0"}
 
         async def f(rpc_call_addr):
@@ -96,18 +94,14 @@ class JsonProvider(object):
             }
 
         if broadcast or threshold:
-            pending = [
-                asyncio.create_task(f(rpc_addr)) for rpc_addr in self._available_rpcs
-            ]
+            pending = [asyncio.create_task(f(rpc_addr)) for rpc_addr in self._available_rpcs]
 
             responses = []
             correct_responses = []
             result = None
 
             while pending and len(pending):
-                done, pending = await asyncio.wait(
-                    pending, return_when=asyncio.FIRST_COMPLETED
-                )
+                done, pending = await asyncio.wait(pending, return_when=asyncio.FIRST_COMPLETED)
                 for task in done:
                     try:
                         result = task.result()
@@ -120,9 +114,7 @@ class JsonProvider(object):
                     array = [hash(json.dumps(x)) for x in responses]
                     most_frequent_element = self.most_frequent_by_hash(array)
                     correct_responses = [
-                        x
-                        for x in responses
-                        if hash(json.dumps(x)) == most_frequent_element
+                        x for x in responses if hash(json.dumps(x)) == most_frequent_element
                     ]
                     if len(correct_responses) >= threshold:
                         for task in pending:
@@ -163,9 +155,7 @@ class JsonProvider(object):
                     if isinstance(body, str) and body in ERROR_CODE_TO_EXCEPTION:
                         key = body
                         body = {}
-                    error = ERROR_CODE_TO_EXCEPTION[key](
-                        body, error_json=content["error"]
-                    )
+                    error = ERROR_CODE_TO_EXCEPTION[key](body, error_json=content["error"])
                 else:
                     break
             return error
@@ -344,9 +334,7 @@ class JsonProvider(object):
         return await self.json_rpc("chunk", [chunk_id])
 
     async def get_tx(self, tx_hash, tx_recipient_id) -> TransactionResult:
-        return TransactionResult(
-            **await self.json_rpc("tx", [tx_hash, tx_recipient_id])
-        )
+        return TransactionResult(**await self.json_rpc("tx", [tx_hash, tx_recipient_id]))
 
     async def get_tx_status(self, tx_hash, tx_recipient_id) -> TransactionResult:
         return TransactionResult(

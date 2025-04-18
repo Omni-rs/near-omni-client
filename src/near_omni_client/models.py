@@ -51,7 +51,7 @@ class ReceiptOutcome:
     receipt_id: str
 
     def __init__(self, data):
-        self.receipt_id = data['id']
+        self.receipt_id = data["id"]
         self.logs = data["outcome"]["logs"]
         self.metadata = data["outcome"]["metadata"]
         self.receipt_ids = data["outcome"]["receipt_ids"]
@@ -62,9 +62,7 @@ class ReceiptOutcome:
     @property
     def error(self):
         if "Failure" in self.status:
-            error_type, args = list(
-                self.status["Failure"]["ActionError"]["kind"].items()
-            )[0]
+            error_type, args = list(self.status["Failure"]["ActionError"]["kind"].items())[0]
             return parse_error(error_type, args)
 
 
@@ -96,9 +94,7 @@ class AccessKey:
     @classmethod
     def build(cls, data: dict) -> "AccessKey":
         if data["permission"] == PublicKeyPermissionType.FULL_ACCESS:
-            return cls(
-                nonce=data["nonce"], permission_type=PublicKeyPermissionType.FULL_ACCESS
-            )
+            return cls(nonce=data["nonce"], permission_type=PublicKeyPermissionType.FULL_ACCESS)
 
         permission_type, permission_data = list(data["permission"].items())[0]
         return cls(
@@ -199,10 +195,7 @@ class DelegateActionModel:
                     )
                 )
             elif act.transactions_type == ActionType.ADD_KEY:
-                if (
-                    act.access_key.permission_type
-                    == PublicKeyPermissionType.FUNCTION_CALL
-                ):
+                if act.access_key.permission_type == PublicKeyPermissionType.FUNCTION_CALL:
                     ak = py_near_primitives.py_near_primitives.AccessKey(
                         act.access_key.nonce,
                         FunctionCallPermission(
@@ -212,9 +205,7 @@ class DelegateActionModel:
                         ),
                     )
                 else:
-                    ak = AccessKey(
-                        act.access_key.nonce, AccessKeyPermissionFieldless.FullAccess
-                    )
+                    ak = AccessKey(act.access_key.nonce, AccessKeyPermissionFieldless.FullAccess)
                 bpk = base58.b58decode(act.public_key.split(":")[1])
                 raw_actions.append(AddKeyAction(bpk, ak))
             else:
@@ -264,9 +255,7 @@ class ReceiptAction:
                 args = None
 
         if action_type == ActionType.DELEGATE:
-            delegate_action = ReceiptDelegateAction.build(
-                action_data["delegate_action"]
-            )
+            delegate_action = ReceiptDelegateAction.build(action_data["delegate_action"])
             return cls(
                 transactions_type=action_type,
                 signature=action_data["signature"],
@@ -324,9 +313,7 @@ class TransactionResult:
     status: dict
     transaction: TransactionData
 
-    def __init__(
-        self, receipts_outcome, transaction_outcome, transaction, status, **kargs
-    ):
+    def __init__(self, receipts_outcome, transaction_outcome, transaction, status, **kargs):
         self.status = status
         self.transaction = TransactionData(**transaction)
         self.transaction_outcome = ReceiptOutcome(transaction_outcome)
@@ -369,9 +356,7 @@ class AccessKey:
     @classmethod
     def build(cls, data: dict) -> "AccessKey":
         if data["permission"] == PublicKeyPermissionType.FULL_ACCESS:
-            return cls(
-                nonce=data["nonce"], permission_type=PublicKeyPermissionType.FULL_ACCESS
-            )
+            return cls(nonce=data["nonce"], permission_type=PublicKeyPermissionType.FULL_ACCESS)
 
         permission_type, permission_data = list(data["permission"].items())[0]
         return cls(

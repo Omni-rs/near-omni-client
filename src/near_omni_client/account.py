@@ -26,6 +26,7 @@ from near_omni_client.models import (
 )
 from near_omni_client.providers import JsonProvider
 
+
 class Account(object):
     """
     This class implement all blockchain functions for your account
@@ -258,11 +259,7 @@ class Account(object):
         ser_args = json.dumps(args).encode("utf8")
         return await self.sign_and_submit_tx(
             contract_id,
-            [
-                transactions.create_function_call_action(
-                    method_name, ser_args, gas, amount
-                )
-            ],
+            [transactions.create_function_call_action(method_name, ser_args, gas, amount)],
             nowait,
             included,
         )
@@ -357,9 +354,7 @@ class Account(object):
         actions = [
             transactions.create_signed_delegate(delegate_action, signature),
         ]
-        return await self.sign_and_submit_tx(
-            delegate_action.sender_id, actions, nowait, included
-        )
+        return await self.sign_and_submit_tx(delegate_action.sender_id, actions, nowait, included)
 
     async def deploy_contract(self, contract_code: bytes, nowait=False):
         """
@@ -463,7 +458,9 @@ class Account(object):
         if public_key not in self._signer_by_pk:
             raise ValueError(f"Public key {public_key} not found in signer list")
 
-        private_key = signing.SigningKey(self._signer_by_pk[public_key], encoder=encoding.RawEncoder)
+        private_key = signing.SigningKey(
+            self._signer_by_pk[public_key], encoder=encoding.RawEncoder
+        )
         sign = private_key.sign(nep461_hash)
         return base58.b58encode(sign).decode("utf-8")
 
