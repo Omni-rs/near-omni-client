@@ -35,7 +35,7 @@ Once you have these installed, make sure you install the project dependencies by
 ```bash
 $ git clone https://github.com/Omni-rs/near-omni-client.git
 
-$ uv sync
+$ uv sync --all-extras --dev
 ```
 
 ## Testing
