@@ -15,7 +15,7 @@ from near_omni_client.exceptions.provider import (
     JsonProviderError,
     RPCTimeoutError,
 )
-from near_omni_client.exceptions import ViewFunctionError
+from near_omni_client.exceptions.exceptions import ViewFunctionError
 from near_omni_client.models import (
     TransactionResult,
     ViewFunctionResult,
