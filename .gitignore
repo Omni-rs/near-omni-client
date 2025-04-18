@@ -1,43 +1,85 @@
-venv
-build
-dist
-.idea
-tests
-near_omni_client.egg-info
-env
-.env
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 
+# C extensions
+*.so
 
-.idea
-.ipynb_checkpoints
-.mypy_cache
-.vscode
-__pycache__
-.pytest_cache
-htmlcov
-dist
-site
-.coverage*
-coverage.xml
-.netlify
-test.db
-log.txt
-Pipfile.lock
-env3.*
-env
-docs_build
-site_build
-venv
-docs.zip
-archive.zip
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# vim temporary files
-*~
-.*.sw?
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+.coverage
+.coverage.*
 .cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+cover/
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+.hypothesis/
+
+# Sphinx documentation
+docs/_build/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Editor configs
+.idea/
+.vscode/
+
+# Ruff
+.ruff_cache/
+
+# Mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Jupyter
+.ipynb_checkpoints/
 
 # macOS
-.DS_Store
+**/.DS_Store
 
-# python 
-.venv
+# Logs
+*.log
+
+# Vim / Emacs / temp files
+*~
+\#*\#
+.\#*
+**/.projectile
