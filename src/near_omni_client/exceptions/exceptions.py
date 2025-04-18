@@ -1,9 +1,11 @@
 from dataclasses import dataclass
 
-from omni_py.exceptions.provider import LackBalanceForState
+from near_omni_client.exceptions.provider import LackBalanceForState
+
 
 class ViewFunctionError(Exception):
     pass
+
 
 class RpcNotAvailableError(Exception):
     pass
@@ -17,6 +19,7 @@ class ActionErrorKind(Exception):
     def __init__(self, **kargs):
         for arg, value in kargs.items():
             setattr(self, arg, value)
+
 
 @dataclass
 class AccountAlreadyExistsError(ActionErrorKind):
