@@ -8,7 +8,7 @@ docs-clean:
     rm -rf docs/build
 
 docs-serve: docs
-    cd docs/build && python3 -m http.server 8000
+    sphinx-autobuild docs/source docs/_build/html --open-browser
 
 lint:
     uv run ruff check .
