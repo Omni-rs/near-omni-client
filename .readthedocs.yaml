@@ -26,3 +26,6 @@ formats:
 python:
   install:
     - path: .
+      extra_requirements:
+        - docs
+
