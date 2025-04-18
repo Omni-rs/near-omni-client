@@ -1,9 +1,9 @@
-name: Test
+name: Format
 
 on: [ push, pull_request ]
 
 jobs:
-  test:
+  format:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -15,5 +15,5 @@ jobs:
       
       - uses: ./.github/actions/install-just
 
-      - name: Run tests
-        run: just test
+      - name: Ensure formatting
+        run: just format-check

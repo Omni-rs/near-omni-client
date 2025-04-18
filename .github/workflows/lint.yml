@@ -1,9 +1,9 @@
-name: Test
+name: Lint
 
 on: [ push, pull_request ]
 
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -15,5 +15,5 @@ jobs:
       
       - uses: ./.github/actions/install-just
 
-      - name: Run tests
-        run: just test
+      - name: Run linter
+        run: just lint
