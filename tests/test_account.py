@@ -1,6 +1,6 @@
 import pytest
 
-from near_omni_client.account import Account
+from near_omni_client.json_rpc.account import Account
 
 
 @pytest.mark.asyncio
