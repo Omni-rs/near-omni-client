@@ -1,5 +1,5 @@
 from typing import List, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, RootModel
 
 
 class FunctionCallPermission(BaseModel):
@@ -8,9 +8,9 @@ class FunctionCallPermission(BaseModel):
     receiver_id: str
 
 
-class FullAccessPermission(BaseModel):
-    __root__: dict = Field(default_factory=dict)
-
+class FullAccessPermission(RootModel[dict]):
+    root: dict = Field(default_factory=dict)
+    
 
 class Permission(BaseModel):
     FunctionCall: Optional[FunctionCallPermission] = None
