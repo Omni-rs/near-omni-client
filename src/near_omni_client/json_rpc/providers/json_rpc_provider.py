@@ -1,20 +1,7 @@
 import httpx
 from typing import Any
 from near_omni_client.json_rpc.interfaces.provider import IJsonRpcProvider
-
-class JsonRpcError(Exception):
-    def __init__(self, name, cause, info=None):
-        self.name = name
-        self.cause = cause
-        self.info = info
-        super().__init__(f"{name} ({cause}): {info}")
-
-    @classmethod
-    def from_response(cls, err: dict):
-        name = err.get("name")
-        cause = err.get("cause", {}).get("name")
-        info = err.get("cause", {}).get("info")
-        return cls(name=name, cause=cause, info=info)
+from near_omni_client.json_rpc.exceptions import JsonRpcError
 
 class JsonRpcProvider(IJsonRpcProvider):
     def __init__(self, rpc_url: str):
