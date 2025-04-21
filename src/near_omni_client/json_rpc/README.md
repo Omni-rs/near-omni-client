@@ -40,7 +40,7 @@
 
 ### 🔄 Transactions
 
-- [ ] `send_tx`: Send a signed transaction.
-- [ ] `tx`: Get transaction status by hash and signer.
-- [ ] `EXPERIMENTAL_tx_status` (EXPERIMENTAL): Get status of a transaction.
-- [ ] `EXPERIMENTAL_receipt`: Broadcast and wait for execution.
+- [✅] `send_tx`: Send a signed transaction.
+- [✅] `tx`: Get transaction status by hash and signer.
+- [❌] `EXPERIMENTAL_tx_status` (EXPERIMENTAL): Get status of a transaction.
+- [❌] `EXPERIMENTAL_receipt`: Broadcast and wait for execution.
