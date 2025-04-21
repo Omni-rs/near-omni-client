@@ -6,9 +6,9 @@ class JsonRpcError(Exception):
     {
         "name": <ERROR_TYPE>,
         "cause": { "name": <ERROR_CAUSE>, "info": {...} },
-        "code": int,
-        "data": str,
-        "message": str
+        "code": int,    # legacy
+        "data": str,    # legacy
+        "message": str  # legacy
     }
     """
     def __init__(self, error_json: dict):
@@ -16,7 +16,7 @@ class JsonRpcError(Exception):
         cause           = error_json.get("cause", {})
         self.cause_name = cause.get("name")
         self.cause_info = cause.get("info")
-        self.code       = error_json.get("code")
-        self.data       = error_json.get("data")
-        self.message    = error_json.get("message")
+        self.code       = error_json.get("code")    # legacy
+        self.data       = error_json.get("data")    # legacy
+        self.message    = error_json.get("message") # legacy
         super().__init__(f"[{self.cause_name or self.error_type}] {self.message}")

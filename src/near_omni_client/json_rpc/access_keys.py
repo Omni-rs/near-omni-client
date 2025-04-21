@@ -1,21 +1,25 @@
 from near_omni_client.json_rpc.interfaces.provider import IJsonRpcProvider
 from near_omni_client.json_rpc.exceptions import JsonRpcError, ERRORS, ERROR_MESSAGES
+from near_omni_client.json_rpc.models import AccessKeyResult
+
 
 class AccessKey:    
     def __init__(self, provider: IJsonRpcProvider):
         self.provider = provider
 
-    async def view_access_key(self, account_id: str, public_key: str, finality: str = "final"):
+    async def view_access_key(self, account_id: str, public_key: str, finality: str = "final") -> AccessKeyResult:
         try:
-            return await self.provider.call("query", {
+            res = await self.provider.call("query", {
                 "request_type": "view_access_key",
                 "finality": finality,
                 "account_id": account_id,
                 "public_key": public_key,
             })
+            return AccessKeyResult.from_json_response(res)
         except JsonRpcError as e:
             error = ERRORS.get(e.cause)
+            message = ERROR_MESSAGES.get(e.cause, str(e))
             if error:
-                raise error(str(e)) from e
+                raise error(message) from e
             raise
         
