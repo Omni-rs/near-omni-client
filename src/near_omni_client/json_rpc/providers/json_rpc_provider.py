@@ -3,6 +3,7 @@ from typing import Any
 from near_omni_client.json_rpc.interfaces.provider import IJsonRpcProvider
 from near_omni_client.json_rpc.exceptions import JsonRpcError
 
+
 class JsonRpcProvider(IJsonRpcProvider):
     def __init__(self, rpc_url: str):
         self.rpc_url = rpc_url
@@ -20,4 +21,4 @@ class JsonRpcProvider(IJsonRpcProvider):
 
             if "error" in data:
                 raise JsonRpcError.from_response(data["error"])
-            return data["result"]
+            return data

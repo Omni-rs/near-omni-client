@@ -1,5 +1,6 @@
 from near_omni_client.json_rpc.models import AccessKeyResult
 
+
 def test_access_key_result_parsing():
     sample = {
         "jsonrpc": "2.0",
@@ -11,18 +12,18 @@ def test_access_key_result_parsing():
                 "FunctionCall": {
                     "allowance": "149788200694421800000000",
                     "method_names": [
-                         "write_record",
+                        "write_record",
                         "get_record",
                         "get_greeting",
                         "__contract_abi",
-                        "contract_source_metadata"
+                        "contract_source_metadata",
                     ],
-                    "receiver_id": "contract.rpc-examples.testnet"
+                    "receiver_id": "contract.rpc-examples.testnet",
                 }
-            }
+            },
         },
-        "id": "dontcare"
+        "id": "dontcare",
     }
 
     result = AccessKeyResult.from_json_response(sample)
-    assert result.permission.FunctionCall.receiver_id == "contract.rpc-examples.testnet"
+    assert result.permission.function_call.receiver_id == "contract.rpc-examples.testnet"
