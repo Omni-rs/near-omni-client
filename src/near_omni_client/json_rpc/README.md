@@ -25,7 +25,7 @@
 
 ### ⛽ Gas
 
-- [ ] `gas_price`: Returns gas price for a specific block_height or block_hash.
+- [✅] `gas_price`: Returns gas price for a specific block_height or block_hash.
 
 ### ⚙️ Protocol
 
