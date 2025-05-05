@@ -1,5 +1,5 @@
 from typing import List, Optional
-from pydantic import BaseModel, Field, RootModel
+from pydantic import BaseModel, ConfigDict, Field, RootModel
 
 
 class FunctionCallPermission(BaseModel):
@@ -8,13 +8,17 @@ class FunctionCallPermission(BaseModel):
     receiver_id: str
 
 
-class FullAccessPermission(RootModel[dict]):
-    root: dict = Field(default_factory=dict)
-    
+class FullAccessPermission(BaseModel):
+    pass
+
 
 class Permission(BaseModel):
-    FunctionCall: Optional[FunctionCallPermission] = None
-    FullAccess: Optional[FullAccessPermission] = None
+    model_config = ConfigDict(validate_by_alias=True)
+
+    function_call: Optional[FunctionCallPermission] = Field(
+        default=None, validation_alias="FunctionCall"
+    )
+    full_access: Optional[FullAccessPermission] = Field(default=None, validation_alias="FullAccess")
 
 
 class AccessKeyResult(BaseModel):
