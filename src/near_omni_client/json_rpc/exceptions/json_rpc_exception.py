@@ -11,12 +11,22 @@ class JsonRpcError(Exception):
         "message": str  # legacy
     }
     """
+
     def __init__(self, error_json: dict):
-        self.error_type  = error_json.get("name")
-        cause           = error_json.get("cause", {})
+        self.error_type = error_json.get("name")
+        cause = error_json.get("cause", {})
         self.cause_name = cause.get("name")
         self.cause_info = cause.get("info")
-        self.code       = error_json.get("code")    # legacy
-        self.data       = error_json.get("data")    # legacy
-        self.message    = error_json.get("message") # legacy
+        self.code = error_json.get("code")  # legacy
+        self.data = error_json.get("data")  # legacy
+        self.message = error_json.get("message")  # legacy
         super().__init__(f"[{self.cause_name or self.error_type}] {self.message}")
+
+    @classmethod
+    def from_response(cls, error_json: dict):
+        """
+        Factory method to create a JsonRpcError instance from a JSON-RPC error response.
+        :param error_json: The JSON-RPC error response.
+        :return: An instance of JsonRpcError.
+        """
+        return cls(error_json)

@@ -1,33 +1,38 @@
-class UnknownAccessKeyError(Exception): 
+class UnknownAccessKeyError(Exception):
     pass
 
-class UnknownAccountError(Exception): 
+
+class UnknownAccountError(Exception):
     pass
 
-class InvalidAccountError(Exception): 
+
+class InvalidAccountError(Exception):
     pass
 
-class UnavailableShardError(Exception): 
+
+class UnavailableShardError(Exception):
     pass
 
-class NoSyncedBlocksError(Exception): 
+
+class NoSyncedBlocksError(Exception):
     pass
+
 
 ERRORS = {
     "UNKNOWN_ACCESS_KEY": UnknownAccessKeyError,
-    "UNKNOWN_ACCOUNT":   UnknownAccountError,
-    "INVALID_ACCOUNT":   InvalidAccountError,
+    "UNKNOWN_ACCOUNT": UnknownAccountError,
+    "INVALID_ACCOUNT": InvalidAccountError,
     "UNAVAILABLE_SHARD": UnavailableShardError,
-    "NO_SYNCED_BLOCKS":  NoSyncedBlocksError,
+    "NO_SYNCED_BLOCKS": NoSyncedBlocksError,
 }
 
 ERROR_MESSAGES = {
-        "UNKNOWN_BLOCK": "The block has not been produced or has been garbage-collected.",
-        "INVALID_ACCOUNT": "The account ID format is invalid.",
-        "UNKNOWN_ACCOUNT": "The account doesn't exist or has been deleted.",
-        "UNKNOWN_ACCESS_KEY": "The public key is not associated with the account.",
-        "UNAVAILABLE_SHARD": "The shard is not tracked by this RPC node.",
-        "NO_SYNCED_BLOCKS": "The node is still syncing and has no blocks.",
-        "INTERNAL_ERROR": "Something went wrong with the node. Try again later.",
-        "PARSE_ERROR": "Invalid JSON-RPC request parameters.",
+    "UNKNOWN_BLOCK": "The block has not been produced or has been garbage-collected.",
+    "INVALID_ACCOUNT": "The account ID format is invalid.",
+    "UNKNOWN_ACCOUNT": "The account doesn't exist or has been deleted.",
+    "UNKNOWN_ACCESS_KEY": "The public key is not associated with the account.",
+    "UNAVAILABLE_SHARD": "The shard is not tracked by this RPC node.",
+    "NO_SYNCED_BLOCKS": "The node is still syncing and has no blocks.",
+    "INTERNAL_ERROR": "Something went wrong with the node. Try again later.",
+    "PARSE_ERROR": "Invalid JSON-RPC request parameters.",
 }
