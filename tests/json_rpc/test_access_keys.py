@@ -1,6 +1,6 @@
 import pytest
 from near_omni_client.json_rpc.access_keys import AccessKey
-from near_omni_client.json_rpc.exceptions import UnknownBlockError,InvalidAccountError,UnknownAccountError, UnknownAccessKeyError, UnavailableShardError, NoSyncedBlocksError
+from near_omni_client.json_rpc.exceptions import UnknownBlockError,InvalidAccountError,UnknownAccountError, UnknownAccessKeyError, UnavailableShardError, NoSyncedBlocksError, ParseError, InternalError
 from tests.json_rpc.mocks import MockProvider
 
 
@@ -190,45 +190,45 @@ async def test_view_access_key_raises_no_synced_blocks():
     assert isinstance(exc_info.value, NoSyncedBlocksError)
 
 
-# @pytest.mark.asyncio
-# async def test_view_access_key_raises_internal_error():
-#     mock_response = {
-#         "jsonrpc": "2.0",
-#         "error": {
-#             "name": "HANDLER_ERROR",
-#             "cause": {"name": "INTERNAL_ERROR", "info": {}},
-#             "code": -32000,
-#             "data": "internal server error",
-#             "message": "Server error",
-#         },
-#         "id": "dontcare",
-#     }
+@pytest.mark.asyncio
+async def test_view_access_key_raises_parse_error():
+    mock_response = {
+        "jsonrpc": "2.0",
+        "error": {
+            "name": "REQUEST_VALIDATION_ERROR",
+            "cause": {"name": "PARSE_ERROR", "info": {}},
+            "code": -32000,
+            "data": "parse error",
+            "message": "Server error",
+        },
+        "id": "dontcare",
+    }
 
-#     client = AccessKey(provider=MockProvider(mock_response))
+    client = AccessKey(provider=MockProvider(mock_response))
 
-#     with pytest.raises(UnknownAccessKeyError) as exc_info:
-#         await client.view_access_key("account.testnet", "ed25519:fakeKey")
+    with pytest.raises(ParseError) as exc_info:
+        await client.view_access_key("account.testnet", "ed25519:fakeKey")
 
-#     assert isinstance(exc_info.value, UnknownAccessKeyError)
+    assert isinstance(exc_info.value, ParseError)
 
 
-# @pytest.mark.asyncio
-# async def test_view_access_key_raises_parse_error():
-#     mock_response = {
-#         "jsonrpc": "2.0",
-#         "error": {
-#             "name": "HANDLER_ERROR",
-#             "cause": {"name": "PARSE_ERROR", "info": {}},
-#             "code": -32000,
-#             "data": "parse error",
-#             "message": "Server error",
-#         },
-#         "id": "dontcare",
-#     }
+@pytest.mark.asyncio
+async def test_view_access_key_raises_internal_error():
+    mock_response = {
+        "jsonrpc": "2.0",
+        "error": {
+            "name": "INTERNAL_ERROR",
+            "cause": {"name": "INTERNAL_ERROR", "info": {}},
+            "code": -32000,
+            "data": "internal server error",
+            "message": "Server error",
+        },
+        "id": "dontcare",
+    }
 
-#     client = AccessKey(provider=MockProvider(mock_response))
+    client = AccessKey(provider=MockProvider(mock_response))
 
-#     with pytest.raises(UnknownAccessKeyError) as exc_info:
-#         await client.view_access_key("account.testnet", "ed25519:fakeKey")
+    with pytest.raises(InternalError) as exc_info:
+        await client.view_access_key("account.testnet", "ed25519:fakeKey")
 
-#     assert isinstance(exc_info.value, UnknownAccessKeyError)
+    assert isinstance(exc_info.value, InternalError)
