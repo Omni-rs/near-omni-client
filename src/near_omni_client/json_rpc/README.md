@@ -11,8 +11,8 @@
 
 - [✅] `view_account`: Returns basic account information.
 - [❌] `account_changes` (EXPERIMENTAL): Returns account changes from transactions in a given account.
-- [✅] `view_code`: Returns the contract code (Wasm binary) deployed to the account.
-- [✅] `view_state`: Returns the state (key value pairs) of a contract based on the key prefix (base64 encoded).
+- [🚧] `view_code`: Returns the contract code (Wasm binary) deployed to the account.
+- [🚧] `view_state`: Returns the state (key value pairs) of a contract based on the key prefix (base64 encoded).
 - [❌] `data_changes` (EXPERIMENTAL): Returns the state change details of a contract based on the key prefix (encoded to base64).
 - [❌] `contract_code_changes` (EXPERIMENTAL): Returns code changes made when deploying a contract.
 - [✅] `call_function`: Allows you to call a contract method as a view function.
@@ -25,7 +25,7 @@
 
 ### ⛽ Gas
 
-- [✅] `gas_price`: Returns gas price for a specific block_height or block_hash.
+- [🚧] `gas_price`: Returns gas price for a specific block_height or block_hash.
 
 ### ⚙️ Protocol
 
@@ -34,9 +34,9 @@
 
 ### 🌐 Network
 
-- [✅] `status`: Returns general status of a given node (sync status, nearcore node version, protocol version, etc.), and the current set of validators.
-- [✅] `network_info`: Returns the current state of node network connections (active peers, transmitted data, etc.)
-- [✅] `validators`: Queries active validators on the network returning details and the state of validation on the blockchain.
+- [🚧] `status`: Returns general status of a given node (sync status, nearcore node version, protocol version, etc.), and the current set of validators.
+- [🚧] `network_info`: Returns the current state of node network connections (active peers, transmitted data, etc.)
+- [🚧] `validators`: Queries active validators on the network returning details and the state of validation on the blockchain.
 
 ### 🔄 Transactions
 
