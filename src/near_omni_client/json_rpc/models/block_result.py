@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Any, List, Optional
 from pydantic import BaseModel
 
 
@@ -11,7 +11,7 @@ class CongestionInfo(BaseModel):
 
 class BlockChunk(BaseModel):
     balance_burnt: str
-    bandwidth_requests: Optional[None]
+    bandwidth_requests: Optional[Any]
     chunk_hash: str
     congestion_info: CongestionInfo
     encoded_length: int
@@ -28,7 +28,7 @@ class BlockChunk(BaseModel):
     shard_id: int
     signature: str
     tx_root: str
-    validator_proposals: List
+    validator_proposals: List[Any]
     validator_reward: str
 
 
@@ -37,7 +37,7 @@ class BlockHeader(BaseModel):
     block_body_hash: str
     block_merkle_root: str
     block_ordinal: int
-    challenges_result: List
+    challenges_result: List[Any]
     challenges_root: str
     chunk_endorsements: List[List[int]]
     chunk_headers_root: str
@@ -65,7 +65,7 @@ class BlockHeader(BaseModel):
     timestamp: int
     timestamp_nanosec: str
     total_supply: str
-    validator_proposals: List
+    validator_proposals: List[Any]
     validator_reward: str
 
 

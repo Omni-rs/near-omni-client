@@ -1,3 +1,4 @@
+from typing import Union
 from near_omni_client.json_rpc.interfaces.provider import IJsonRpcProvider
 from near_omni_client.json_rpc.exceptions import JsonRpcError, ERRORS, ERROR_MESSAGES
 from near_omni_client.json_rpc.models import BlockResult

@@ -8,10 +8,9 @@ class MockProvider(IJsonRpcProvider):
         "view_access_key",
         "view_account",
         "call_function",
-        "block",
     }
 
-    supported_methods = {"query", "block"}
+    supported_methods = {"query", "block", "chunk"}
 
     def __init__(self, response: dict):
         self.response = response

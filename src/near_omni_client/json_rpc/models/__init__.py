@@ -2,6 +2,7 @@ from .access_key_result import AccessKeyResult
 from .access_keys_result import AccessKeyListResult
 from .accounts_result import AccountResult, CallFunctionResult
 from .block_result import BlockResult
+from .chunk_result import ChunkResult
 
 __all__ = [
     "AccessKeyResult",
@@ -9,4 +10,5 @@ __all__ = [
     "AccountResult",
     "CallFunctionResult",
     "BlockResult",
+    "ChunkResult",
 ]
