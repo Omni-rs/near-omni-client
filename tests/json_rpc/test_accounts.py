@@ -4,6 +4,7 @@ from near_omni_client.json_rpc.models import AccountResult, CallFunctionResult
 from near_omni_client.json_rpc.accounts import Accounts
 from tests.json_rpc.mocks import MockProvider
 
+
 # ------------------------------------------------------
 # View Account
 # ------------------------------------------------------
@@ -19,9 +20,9 @@ async def test_view_account():
             "code_hash": "11111111111111111111111111111111",
             "locked": "0",
             "storage_paid_at": 0,
-            "storage_usage": 410
+            "storage_usage": 410,
         },
-        "id": "dontcare"
+        "id": "dontcare",
     }
 
     provider = MockProvider(mock_response)
@@ -32,6 +33,7 @@ async def test_view_account():
     assert isinstance(result, AccountResult)
     assert result.block_hash == "56xEo2LorUFVNbkFhCncFSWNiobdp1kzm14nZ47b5JVW"
     assert result.amount == "999788200694421800000000"
+
 
 # ------------------------------------------------------
 # Call Function
@@ -47,11 +49,40 @@ async def test_call_function():
             "block_height": 187444191,
             "logs": [],
             "result": [
-                34, 71, 114, 101, 101, 116, 105, 110, 103, 115, 32, 102, 114, 111, 109,
-                32, 78, 69, 65, 82, 32, 80, 114, 111, 116, 111, 99, 111, 108, 33, 34
-            ]
+                34,
+                71,
+                114,
+                101,
+                101,
+                116,
+                105,
+                110,
+                103,
+                115,
+                32,
+                102,
+                114,
+                111,
+                109,
+                32,
+                78,
+                69,
+                65,
+                82,
+                32,
+                80,
+                114,
+                111,
+                116,
+                111,
+                99,
+                111,
+                108,
+                33,
+                34,
+            ],
         },
-        "id": "dontcare"
+        "id": "dontcare",
     }
 
     provider = MockProvider(mock_response)

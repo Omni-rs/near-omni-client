@@ -1,6 +1,7 @@
 from pydantic import BaseModel, model_validator
 from .access_key_result import Permission
 
+
 class AccessKeyInner(BaseModel):
     nonce: int
     permission: Permission
@@ -12,6 +13,7 @@ class AccessKeyInner(BaseModel):
             if data["permission"] == "FullAccess":
                 data["permission"] = {"FullAccess": {}}
         return data
+
 
 class AccessKeyEntry(BaseModel):
     public_key: str

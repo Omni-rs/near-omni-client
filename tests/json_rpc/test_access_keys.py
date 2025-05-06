@@ -1,7 +1,17 @@
 import pytest
 from near_omni_client.json_rpc.access_keys import AccessKey
-from near_omni_client.json_rpc.exceptions import UnknownBlockError,InvalidAccountError,UnknownAccountError, UnknownAccessKeyError, UnavailableShardError, NoSyncedBlocksError, ParseError, InternalError
+from near_omni_client.json_rpc.exceptions import (
+    UnknownBlockError,
+    InvalidAccountError,
+    UnknownAccountError,
+    UnknownAccessKeyError,
+    UnavailableShardError,
+    NoSyncedBlocksError,
+    ParseError,
+    InternalError,
+)
 from tests.json_rpc.mocks import MockProvider
+
 
 # ------------------------------------------------------
 # View Access Key
@@ -235,9 +245,11 @@ async def test_view_access_key_raises_internal_error():
 
     assert isinstance(exc_info.value, InternalError)
 
+
 # ------------------------------------------------------
 # View Access Key List
 # ------------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_view_access_key_list():
@@ -248,11 +260,8 @@ async def test_view_access_key_list():
             "block_height": 187319080,
             "keys": [
                 {
-                    "access_key": {
-                        "nonce": 187309654000000,
-                        "permission": "FullAccess"
-                    },
-                    "public_key": "ed25519:vJBU18AtvePANmepMoY3rtV3wt1RHwqoktak82E4d2M"
+                    "access_key": {"nonce": 187309654000000, "permission": "FullAccess"},
+                    "public_key": "ed25519:vJBU18AtvePANmepMoY3rtV3wt1RHwqoktak82E4d2M",
                 },
                 {
                     "access_key": {
@@ -265,17 +274,17 @@ async def test_view_access_key_list():
                                     "get_record",
                                     "get_greeting",
                                     "__contract_abi",
-                                    "contract_source_metadata"
+                                    "contract_source_metadata",
                                 ],
-                                "receiver_id": "contract.rpc-examples.testnet"
+                                "receiver_id": "contract.rpc-examples.testnet",
                             }
-                        }
+                        },
                     },
-                    "public_key": "ed25519:EddTahJwZpJjYPPmat7DBm1m2vdrFBzVv7e3T4hzkENd"
-                }
-            ]
+                    "public_key": "ed25519:EddTahJwZpJjYPPmat7DBm1m2vdrFBzVv7e3T4hzkENd",
+                },
+            ],
         },
-        "id": "dontcare"
+        "id": "dontcare",
     }
 
     access_key_service = AccessKey(provider=MockProvider(mock_response))

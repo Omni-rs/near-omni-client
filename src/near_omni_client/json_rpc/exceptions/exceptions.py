@@ -1,23 +1,30 @@
 class UnknownBlockError(Exception):
     pass
 
+
 class InvalidAccountError(Exception):
     pass
+
 
 class UnknownAccountError(Exception):
     pass
 
+
 class UnknownAccessKeyError(Exception):
     pass
+
 
 class UnavailableShardError(Exception):
     pass
 
+
 class NoSyncedBlocksError(Exception):
     pass
 
+
 class InternalError(Exception):
     pass
+
 
 class ParseError(Exception):
     pass
@@ -31,7 +38,7 @@ ERRORS = {
     "UNAVAILABLE_SHARD": UnavailableShardError,
     "NO_SYNCED_BLOCKS": NoSyncedBlocksError,
     "INTERNAL_ERROR": InternalError,
-    "PARSE_ERROR": ParseError
+    "PARSE_ERROR": ParseError,
 }
 
 
@@ -43,5 +50,5 @@ ERROR_MESSAGES = {
     "UNAVAILABLE_SHARD": "The shard is not tracked by this RPC node.",
     "NO_SYNCED_BLOCKS": "The node is still syncing and has no blocks.",
     "INTERNAL_ERROR": "Something went wrong with the node. Try again later.",
-    "PARSE_ERROR": "Invalid JSON-RPC request parameters."
+    "PARSE_ERROR": "Invalid JSON-RPC request parameters.",
 }

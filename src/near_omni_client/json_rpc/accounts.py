@@ -10,9 +10,7 @@ class Accounts:
     def __init__(self, provider: IJsonRpcProvider):
         self.provider = provider
 
-    async def view_account(
-        self, account_id: str, finality: str = "final"
-    ) -> AccountResult:
+    async def view_account(self, account_id: str, finality: str = "final") -> AccountResult:
         try:
             res = await self.provider.call(
                 "query",
@@ -29,7 +27,6 @@ class Accounts:
             if error:
                 raise error(message) from e
             raise
-
 
     async def call_function(
         self, account_id: str, method_name: str, args: dict, finality: str = "final"
@@ -53,4 +50,3 @@ class Accounts:
             if error:
                 raise error(message) from e
             raise
-        

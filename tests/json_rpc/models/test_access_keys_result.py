@@ -9,11 +9,8 @@ def test_access_keys_list_result_parsing():
             "block_height": 187319080,
             "keys": [
                 {
-                    "access_key": {
-                        "nonce": 187309654000000,
-                        "permission": "FullAccess"
-                    },
-                    "public_key": "ed25519:vJBU18AtvePANmepMoY3rtV3wt1RHwqoktak82E4d2M"
+                    "access_key": {"nonce": 187309654000000, "permission": "FullAccess"},
+                    "public_key": "ed25519:vJBU18AtvePANmepMoY3rtV3wt1RHwqoktak82E4d2M",
                 },
                 {
                     "access_key": {
@@ -26,17 +23,17 @@ def test_access_keys_list_result_parsing():
                                     "get_record",
                                     "get_greeting",
                                     "__contract_abi",
-                                    "contract_source_metadata"
+                                    "contract_source_metadata",
                                 ],
-                                "receiver_id": "contract.rpc-examples.testnet"
+                                "receiver_id": "contract.rpc-examples.testnet",
                             }
-                        }
+                        },
                     },
-                    "public_key": "ed25519:EddTahJwZpJjYPPmat7DBm1m2vdrFBzVv7e3T4hzkENd"
-                }
-            ]
+                    "public_key": "ed25519:EddTahJwZpJjYPPmat7DBm1m2vdrFBzVv7e3T4hzkENd",
+                },
+            ],
         },
-        "id": "dontcare"
+        "id": "dontcare",
     }
 
     result = AccessKeyListResult.from_json_response(sample)
@@ -56,4 +53,7 @@ def test_access_keys_list_result_parsing():
     assert second_key.access_key.nonce == 187309654000001
     assert second_key.access_key.permission.full_access is None
     assert second_key.access_key.permission.function_call is not None
-    assert second_key.access_key.permission.function_call.receiver_id == "contract.rpc-examples.testnet"
+    assert (
+        second_key.access_key.permission.function_call.receiver_id
+        == "contract.rpc-examples.testnet"
+    )

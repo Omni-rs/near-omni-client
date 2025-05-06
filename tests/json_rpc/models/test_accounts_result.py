@@ -1,4 +1,4 @@
-from near_omni_client.json_rpc.models import AccountResult,CallFunctionResult
+from near_omni_client.json_rpc.models import AccountResult, CallFunctionResult
 
 
 def test_account_result_parsing():
@@ -11,9 +11,9 @@ def test_account_result_parsing():
             "code_hash": "11111111111111111111111111111111",
             "locked": "0",
             "storage_paid_at": 0,
-            "storage_usage": 410
+            "storage_usage": 410,
         },
-        "id": "dontcare"
+        "id": "dontcare",
     }
 
     result = AccountResult.from_json_response(sample)
@@ -35,11 +35,40 @@ def test_call_function_result_parsing():
             "block_height": 187444191,
             "logs": [],
             "result": [
-                34, 71, 114, 101, 101, 116, 105, 110, 103, 115, 32, 102, 114, 111, 109,
-                32, 78, 69, 65, 82, 32, 80, 114, 111, 116, 111, 99, 111, 108, 33, 34
-            ]
+                34,
+                71,
+                114,
+                101,
+                101,
+                116,
+                105,
+                110,
+                103,
+                115,
+                32,
+                102,
+                114,
+                111,
+                109,
+                32,
+                78,
+                69,
+                65,
+                82,
+                32,
+                80,
+                114,
+                111,
+                116,
+                111,
+                99,
+                111,
+                108,
+                33,
+                34,
+            ],
         },
-        "id": "dontcare"
+        "id": "dontcare",
     }
 
     result = CallFunctionResult.from_json_response(sample)
@@ -49,4 +78,3 @@ def test_call_function_result_parsing():
     assert result.logs == []
     assert isinstance(result.result, list)
     assert result.decoded_result() == '"Greetings from NEAR Protocol!"'
-

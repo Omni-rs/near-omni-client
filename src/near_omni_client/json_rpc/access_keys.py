@@ -1,6 +1,6 @@
 from near_omni_client.json_rpc.interfaces.provider import IJsonRpcProvider
 from near_omni_client.json_rpc.exceptions import JsonRpcError, ERRORS, ERROR_MESSAGES
-from near_omni_client.json_rpc.models import AccessKeyResult,AccessKeyListResult
+from near_omni_client.json_rpc.models import AccessKeyResult, AccessKeyListResult
 
 
 class AccessKey:
@@ -27,7 +27,7 @@ class AccessKey:
             if error:
                 raise error(message) from e
             raise
-    
+
     async def view_access_key_list(
         self, account_id: str, finality: str = "final"
     ) -> AccessKeyListResult:
