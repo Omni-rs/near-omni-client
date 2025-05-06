@@ -1,6 +1,5 @@
-# tests/json_rpc/test_block.py
-
 import pytest
+
 from near_omni_client.json_rpc.block import Block
 from near_omni_client.json_rpc.models import BlockResult
 from tests.json_rpc.mocks import MockProvider
