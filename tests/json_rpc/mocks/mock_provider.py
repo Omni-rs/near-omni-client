@@ -3,7 +3,7 @@ from near_omni_client.json_rpc.exceptions import JsonRpcError
 
 
 class MockProvider(IJsonRpcProvider):
-    supported_request_types = {"view_access_key_list", "view_access_key"}
+    supported_request_types = {"view_access_key_list", "view_access_key", "view_account", "call_function"}
 
     def __init__(self, response: dict):
         self.response = response
