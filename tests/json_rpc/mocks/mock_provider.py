@@ -10,7 +10,7 @@ class MockProvider(IJsonRpcProvider):
         "call_function",
     }
 
-    supported_methods = {"query", "block", "chunk"}
+    supported_methods = {"query", "block", "chunk", "send_tx"}
 
     def __init__(self, response: dict):
         self.response = response
