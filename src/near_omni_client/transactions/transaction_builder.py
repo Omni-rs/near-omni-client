@@ -9,7 +9,6 @@ class TransactionBuilder:
         self._nonce: int | None = None
         self._receiver_id: str | None = None
         self._block_hash: bytes | None = None
-        self._priority_fee: int | None = None
         self._actions: list[Any] = []
 
     def with_signer_id(self, signer_id: str) -> "TransactionBuilder":
@@ -32,10 +31,6 @@ class TransactionBuilder:
         self._block_hash = block_hash
         return self
 
-    def with_priority_fee(self, fee: int) -> "TransactionBuilder":
-        self._priority_fee = fee
-        return self
-
     def add_action(self, action: Any) -> "TransactionBuilder":
         self._actions.append(action)
         return self
@@ -56,11 +51,10 @@ class TransactionBuilder:
             raise ValueError(f"Missing required fields: {', '.join(missing)}")
 
         return NearTransaction(
-            self._signer_id,  # type: ignore
-            self._public_key,  # type: ignore
-            self._nonce,  # type: ignore
-            self._receiver_id,  # type: ignore
-            self._block_hash,  # type: ignore
+            self._signer_id,
+            self._public_key,
+            self._nonce,
+            self._receiver_id,
+            self._block_hash,
             self._actions,
-            priority_fee=self._priority_fee,
         )

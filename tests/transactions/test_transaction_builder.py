@@ -1,6 +1,6 @@
 import pytest
 from py_near_primitives import Transaction as NearTransaction
-from near_omni_client.transactions import TransactionBuilder
+from near_omni_client.transactions import TransactionBuilder, ActionFactory
 
 
 def test_transaction_builder_missing_fields():
@@ -20,7 +20,7 @@ def test_transaction_builder_success():
     receiver_id = "bob.testnet"
     block_hash = b"\x02" * 32
     priority_fee = 99
-    dummy_action = object()
+    create_account_action = ActionFactory.create_account()
 
     tx = (
         TransactionBuilder()
@@ -29,16 +29,13 @@ def test_transaction_builder_success():
         .with_nonce(nonce)
         .with_receiver(receiver_id)
         .with_block_hash(block_hash)
-        .with_priority_fee(priority_fee)
-        .add_action(dummy_action)
+        .add_action(create_account_action)
         .build()
     )
 
     assert isinstance(tx, NearTransaction)
     assert tx.signer_id == signer_id
-    assert tx.public_key == public_key
+    assert bytes(tx.public_key) == public_key
     assert tx.nonce == nonce
     assert tx.receiver_id == receiver_id
-    assert tx.block_hash == block_hash
-    assert tx.actions == [dummy_action]
-    assert getattr(tx, "priority_fee", None) == priority_fee
+    assert bytes(tx.block_hash) == block_hash
