@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "base58>=2.1.1",
+    "ecdsa>=0.19.1",
     "httpx>=0.28.1",
     "loguru>=0.7.3",
     "py-near-primitives>=0.2.3",

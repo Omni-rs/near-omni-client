@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import Any, Dict, List, Union
 import base58
+import json
 
 from py_near_primitives import (
     CreateAccountAction,
@@ -45,7 +46,8 @@ class ActionFactory:
     def function_call(
         method_name: str, args: Union[bytes, Dict[str, Any]], gas: int, deposit: int
     ) -> NearFunctionCallAction:
-        # args should be already serialized to bytes or borsh; adapt as needed
+        if isinstance(args, dict):
+            args = json.dumps(args).encode("utf-8")
         return NearFunctionCallAction(method_name, args, gas, deposit)
 
     @staticmethod

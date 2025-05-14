@@ -26,3 +26,5 @@ format:
 format-check:
 	uv run ruff format . --check
 
+run-example:
+    uv run python -m examples/transaction_flow.py
