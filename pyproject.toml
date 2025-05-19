@@ -12,6 +12,7 @@ dependencies = [
     "py-near-primitives>=0.2.3",
     "pydantic>=2.11.3",
     "pynacl>=1.5.0",
+    "secp256k1>=0.14.0",
 ]
 
 [project.optional-dependencies]

@@ -423,6 +423,7 @@ dependencies = [
     { name = "py-near-primitives" },
     { name = "pydantic" },
     { name = "pynacl" },
+    { name = "secp256k1" },
 ]
 
 [package.optional-dependencies]
@@ -455,6 +456,7 @@ requires-dist = [
     { name = "py-near-primitives", specifier = ">=0.2.3" },
     { name = "pydantic", specifier = ">=2.11.3" },
     { name = "pynacl", specifier = ">=1.5.0" },
+    { name = "secp256k1", specifier = ">=0.14.0" },
     { name = "sphinx", marker = "extra == 'docs'", specifier = ">=8.2.3" },
     { name = "sphinx-autobuild", marker = "extra == 'docs'", specifier = ">=2024.10.3" },
     { name = "sphinx-autodoc-typehints", marker = "extra == 'docs'", specifier = ">=3.1.0" },
@@ -741,6 +743,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/42/46/8997872bc44d43df986491c18d4418f1caff03bc47b7f381261d62c23442/ruff-0.11.6-py3-none-win_amd64.whl", hash = "sha256:cce85721d09c51f3b782c331b0abd07e9d7d5f775840379c640606d3159cae0e", size = 11558592 },
     { url = "https://files.pythonhosted.org/packages/d7/6a/65fecd51a9ca19e1477c3879a7fda24f8904174d1275b419422ac00f6eee/ruff-0.11.6-py3-none-win_arm64.whl", hash = "sha256:3567ba0d07fb170b1b48d944715e3294b77f5b7679e8ba258199a250383ccb79", size = 10682766 },
 ]
+
+[[package]]
+name = "secp256k1"
+version = "0.14.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cffi" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/9b/41/bb668a6e4192303542d2d90c3b38d564af3c17c61bd7d4039af4f29405fe/secp256k1-0.14.0.tar.gz", hash = "sha256:82c06712d69ef945220c8b53c1a0d424c2ff6a1f64aee609030df79ad8383397", size = 2420607 }
 
 [[package]]
 name = "six"

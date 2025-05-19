@@ -1,0 +1,31 @@
+from .keypair_base import KeyPairBase
+from .keypair_ed25519 import KeyPairEd25519
+from .keypair_secp256k1 import KeyPairSecp256k1
+from base58 import b58decode
+
+
+class KeyPair:
+    @staticmethod
+    def from_random(curve: str) -> KeyPairBase:
+        curve = curve.lower()
+        if curve == "ed25519":
+            return KeyPairEd25519.from_random()
+        elif curve == "secp256k1":
+            return KeyPairSecp256k1.from_random()
+        else:
+            raise ValueError(f"Unknown curve type: {curve}")
+
+    @staticmethod
+    def from_string(encoded: str) -> KeyPairBase:
+        parts = encoded.split(":")
+        if len(parts) != 2:
+            raise ValueError("Invalid encoded key format, must be <curve>:<encoded key>")
+        curve, key = parts
+        curve = curve.lower()
+        decoded = b58decode(key)
+        if curve == "ed25519":
+            return KeyPairEd25519(decoded)
+        elif curve == "secp256k1":
+            return KeyPairSecp256k1(decoded)
+        else:
+            raise ValueError(f"Unsupported curve: {curve}")
