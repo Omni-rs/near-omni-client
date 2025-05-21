@@ -1,8 +1,9 @@
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 from base58 import b58decode, b58encode
+import secp256k1
 
-from .constants import KeyType, KeySize
+from .types import KeyType, KeySize
 
 
 class PublicKey:
@@ -15,7 +16,7 @@ class PublicKey:
                 raise ValueError("Invalid SECP256K1 public key size")
         else:
             raise ValueError(f"Unknown key type: {key_type}")
-        
+
         self._key_type = key_type
         self._data = data
 
@@ -28,14 +29,14 @@ class PublicKey:
             inferred_type = KeyType.SECP256K1 if len(decoded) == 64 else KeyType.ED25519
             return PublicKey(inferred_type, decoded)
         elif len(parts) == 2:
-            key_type = PublicKey._str_to_key_type(parts[0])
+            key_type = PublicKey.parse_key_type(parts[0])
             decoded = b58decode(parts[1])
             return PublicKey(key_type, decoded)
         else:
             raise ValueError("Invalid key format")
 
     def to_string(self) -> str:
-        return f"{self.key_type}:{b58encode(self.data).decode()}"
+        return f"{self.key_type.value}:{b58encode(self.data).decode()}"
 
     def verify(self, message: bytes, signature: bytes) -> bool:
         if self._key_type == KeyType.ED25519:
@@ -45,11 +46,21 @@ class PublicKey:
             except BadSignatureError:
                 return False
         elif self._key_type == KeyType.SECP256K1:
-            import secp256k1
             pub = secp256k1.PublicKey(bytes([0x04]) + self._data, raw=True)
             return pub.ecdsa_verify(signature[:64], message, raw=True)
         else:
             raise ValueError(f"Unsupported key type: {self._key_type}")
+
+    @staticmethod
+    def parse_key_type(s: str) -> KeyType:
+        """
+        Convert a string to a KeyType enum.
+        Accepts 'ed25519' or 'secp256k1' (case-insensitive).
+        """
+        try:
+            return KeyType(s.lower())
+        except ValueError:
+            raise ValueError(f"Unknown key type: {s}")
 
     @property
     def key_type(self) -> KeyType:

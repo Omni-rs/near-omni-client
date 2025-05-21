@@ -19,7 +19,7 @@ class KeyPairEd25519(KeyPairBase):
     def __init__(self, extended_secret_key: str):
         """
         Construct a KeyPairEd25519 from a base58-encoded extended secret key.
-        The input must contain 64 bytes when decoded: 
+        The input must contain 64 bytes when decoded:
         - first 32 bytes: secret key
         - next 32 bytes: public key
         """
@@ -28,8 +28,8 @@ class KeyPairEd25519(KeyPairBase):
             raise ValueError("Invalid extended secret key length")
 
         # Split into secret and public key parts
-        secret = decoded[:KeySize.SECRET_KEY]
-        public = decoded[KeySize.SECRET_KEY:]
+        secret = decoded[: KeySize.SECRET_KEY]
+        public = decoded[KeySize.SECRET_KEY :]
 
         # Create the internal SigningKey and VerifyKey from the secret
         self._signing_key = SigningKey(secret, encoder=RawEncoder)
@@ -71,7 +71,15 @@ class KeyPairEd25519(KeyPairBase):
         except BadSignatureError:
             return False
 
-    def get_public_key(self) -> PublicKey:
+    @property
+    def secret_key(self) -> str:
+        """
+        Return the base58-encoded secret key (32 bytes).
+        """
+        return b58encode(self._signing_key.encode()).decode()
+
+    @property
+    def public_key(self) -> PublicKey:
         """
         Return the public key corresponding to the private key.
         """
@@ -82,4 +90,4 @@ class KeyPairEd25519(KeyPairBase):
         Return a serialized representation of the key pair as:
         'ed25519:<base58-encoded-extended-secret-key>'
         """
-        return KeyPairString(f"{KeyType.ED25519}:{self._extended_secret_key}")
+        return KeyPairString(f"{KeyType.ED25519.value}:{self._extended_secret_key}")
