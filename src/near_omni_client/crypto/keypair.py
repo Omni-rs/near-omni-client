@@ -22,10 +22,10 @@ class KeyPair:
             raise ValueError("Invalid encoded key format, must be <curve>:<encoded key>")
         curve, key = parts
         curve = curve.lower()
-        decoded = b58decode(key)
+
         if curve == "ed25519":
-            return KeyPairEd25519(decoded)
+            return KeyPairEd25519(key)
         elif curve == "secp256k1":
-            return KeyPairSecp256k1(decoded)
+            return KeyPairSecp256k1(key)
         else:
             raise ValueError(f"Unsupported curve: {curve}")

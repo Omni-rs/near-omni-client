@@ -1,93 +1,55 @@
-from .keypair_base import KeyPairBase
-from .signature import Signature
-from .public_key import PublicKey
-from .types import KeyType, KeyPairString, KeySize
-
+from base58 import b58decode, b58encode
+from nacl import bindings
+import os
 from nacl.signing import SigningKey
-from nacl.encoding import RawEncoder
-from nacl.exceptions import BadSignatureError
-from base58 import b58encode, b58decode
+
+from .keypair_base import KeyPairBase
+from .public_key import PublicKey
+from .signature import Signature
+from .types import KeyType, KeyPairString, KeySize
 
 
 class KeyPairEd25519(KeyPairBase):
     """
-    Implements Ed25519 key pair functionality:
-    - Accepts a base58-encoded extended secret key (32-byte secret + 32-byte public).
-    - Provides signing, verification, and serialization.
+    Implements Ed25519 key pair functionality exactly like @near-js/utils:
+    - Always decodes the extended key, uses only the first 32 bytes as secret.
+    - Recalculates the public key from the secret.
     """
 
     def __init__(self, extended_secret_key: str):
-        """
-        Construct a KeyPairEd25519 from a base58-encoded extended secret key.
-        The input must contain 64 bytes when decoded:
-        - first 32 bytes: secret key
-        - next 32 bytes: public key
-        """
         decoded = b58decode(extended_secret_key)
-        if len(decoded) != KeySize.SECRET_KEY + KeySize.PUBLIC_KEY:
-            raise ValueError("Invalid extended secret key length")
-
-        # Split into secret and public key parts
-        secret = decoded[: KeySize.SECRET_KEY]
-        public = decoded[KeySize.SECRET_KEY :]
-
-        # Create the internal SigningKey and VerifyKey from the secret
-        self._signing_key = SigningKey(secret, encoder=RawEncoder)
-        self._verify_key = self._signing_key.verify_key
-
-        # Store the public key in our custom PublicKey format
-        self._public_key = PublicKey(KeyType.ED25519, public)
-
-        # Save the original base58-encoded extended key for reuse
-        self._extended_secret_key = extended_secret_key
+        seed = decoded[: KeySize.SECRET_KEY]  # 32 bytes
+        public_key = bindings.crypto_sign_seed_keypair(seed)[0]
+        self.publicKey = PublicKey(KeyType.ED25519, public_key)
+        self.secretKey = b58encode(seed).decode()
+        self.extendedSecretKey = extended_secret_key
 
     @staticmethod
     def from_random() -> "KeyPairEd25519":
-        """
-        Generate a new random Ed25519 key pair.
-        Returns a KeyPairEd25519 instance with a base58-encoded extended secret key.
-        """
-        sk = SigningKey.generate()
-        pk = sk.verify_key.encode()
-        extended = sk.encode() + pk  # 32-byte secret + 32-byte public
+        seed = os.urandom(KeySize.SECRET_KEY)
+        _, public_key = bindings.crypto_sign_seed_keypair(seed)
+        extended = seed + public_key
         return KeyPairEd25519(b58encode(extended).decode())
 
     def sign(self, message: bytes) -> Signature:
-        """
-        Sign the given message using the secret key.
-        Returns a Signature object that includes both the raw signature and the public key.
-        """
-        signature = self._signing_key.sign(message).signature
-        return Signature(signature=signature, public_key=self._public_key)
+        seed = b58decode(self.secretKey)
+        signing_key = SigningKey(seed)
+        signature = signing_key.sign(message).signature
+        return Signature(signature=signature, public_key=self.publicKey)
 
     def verify(self, message: bytes, signature: bytes) -> bool:
-        """
-        Verify that a signature is valid for the given message.
-        Uses the stored public key to perform verification.
-        """
-        try:
-            self._verify_key.verify(message, signature)
-            return True
-        except BadSignatureError:
-            return False
+        return self.publicKey.verify(message, signature)
+
+    def to_string(self) -> KeyPairString:
+        return KeyPairString(f"{KeyType.ED25519.value}:{self.extendedSecretKey}")
+
+    def get_public_key(self) -> PublicKey:
+        return self.publicKey
 
     @property
     def secret_key(self) -> str:
-        """
-        Return the base58-encoded secret key (32 bytes).
-        """
-        return b58encode(self._signing_key.encode()).decode()
+        return self.secretKey
 
     @property
     def public_key(self) -> PublicKey:
-        """
-        Return the public key corresponding to the private key.
-        """
-        return self._public_key
-
-    def to_string(self) -> KeyPairString:
-        """
-        Return a serialized representation of the key pair as:
-        'ed25519:<base58-encoded-extended-secret-key>'
-        """
-        return KeyPairString(f"{KeyType.ED25519.value}:{self._extended_secret_key}")
+        return self.publicKey

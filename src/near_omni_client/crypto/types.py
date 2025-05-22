@@ -5,7 +5,7 @@ from typing import NewType
 class KeySize:
     SECRET_KEY = 32
     PUBLIC_KEY = 32
-    SECP256K1_PUBLIC_KEY = 64  # uncompressed without 0x04
+    PUBLIC_KEY_SECP256K1 = 64  # uncompressed without 0x04
 
 
 class KeyType(str, Enum):
