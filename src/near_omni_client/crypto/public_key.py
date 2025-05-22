@@ -47,7 +47,12 @@ class PublicKey:
                 return False
         elif self._key_type == KeyType.SECP256K1:
             pub = secp256k1.PublicKey(bytes([0x04]) + self._data, raw=True)
-            return pub.ecdsa_verify(signature[:64], message, raw=True)
+            # Just ignore the recovery ID (last byte)
+            sig_bytes = signature[:-1]
+            # Parse the signature
+            sig = pub.ecdsa_deserialize_compact(sig_bytes)
+            # Verify
+            return pub.ecdsa_verify(message, sig, raw=True)
         else:
             raise ValueError(f"Unsupported key type: {self._key_type}")
 
