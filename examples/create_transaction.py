@@ -1,56 +1,54 @@
 import asyncio
+import base64
+import os
+
 from near_omni_client.transactions import TransactionBuilder, ActionFactory
-from near_omni_client.signers import KeypairSigner
-from near_omni_client.transactions import Transactions, TxExecutionStatus
-from near_omni_client.json_rpc.providers import JsonRpcProvider
+from near_omni_client.json_rpc.client import NearClient
+from near_omni_client.transactions.utils import decode_key
+from dotenv import load_dotenv
+
 
 async def main():
+    load_dotenv()
+
+    private_key_str = os.getenv("NEAR_PRIVATE_KEY")
+    public_key_str = os.getenv("NEAR_PUBLIC_KEY")
+    account_id = os.getenv("NEAR_ACCOUNT_ID")
+
     # 1) Create a transaction
+    near_client = NearClient(provider_url="https://rpc.testnet.near.org")
+    nonce_and_block_hash = await near_client.get_nonce_and_block_hash(account_id, public_key_str)
+
+    print("nonce_and_block_hash", nonce_and_block_hash)
+
     tx_builder = TransactionBuilder()
     tx = (
-        tx_builder.with_signer_id("alice.testnet")
-        .with_public_key(bytes.fromhex("…32 bytes…"))
-        .with_nonce(42)
+        tx_builder.with_signer_id(account_id)
+        .with_public_key(public_key_str)
+        .with_nonce(nonce_and_block_hash["nonce"])
         .with_receiver("contract.testnet")
-        .with_block_hash(bytes.fromhex("…32 bytes…"))
+        .with_block_hash(nonce_and_block_hash["block_hash"])
         .add_action(
-            ActionFactory.function_call(
-                "do_work",
-                b'{"foo":"bar"}',
-                gas=100_000_000_000_000,
-                deposit=0,
+            ActionFactory.transfer(
+                deposit=1,
             )
         )
         .build()
     )
 
-    provider_url = "https://rpc.testnet.near.org"
-    json_rpc_provider = JsonRpcProvider(provider_url)
-    # provider = JsonRpcProvider(json_rpc_provider) 
     # 2) Sign the transaction
-    # signer = KeypairSigner("ed25519:…private key…")
-    # signed_b64 = signer.sign_base64(tx)
+    private_key_bytes = decode_key(private_key_str)
+    signed_tx = tx.to_vec(private_key_bytes)
+    print("signed_tx", signed_tx)
 
-    # 3) Propagate the transaction
-    # provider = HttpProvider("https://rpc.testnet.near.org")
-    # tx_client = Transactions(provider)
-    # result = await tx_client.send_transaction(
-    #     signed_tx_base64=signed_b64,
-    #     wait_until=TxExecutionStatus.INCLUDED_FINAL,
-    # )
+    signed_tx_bytes = bytes(bytearray(signed_tx))
+    signed_tx_base64 = base64.b64encode(signed_tx_bytes).decode("utf-8")
+    print("signed_tx_base64", signed_tx_base64)
 
-    # print("Hash:", result.transaction.hash)
-    # print("Final status:", result.final_execution_status)
+    # 3) Send the transaction
+    result = await near_client.send_raw_transaction(signed_tx_base64)
+    print("result", result)
 
 
 if __name__ == "__main__":
     asyncio.run(main())
-
-
-# from near_omni_client.signers import MpcSigner
-# from near_omni_client.wallets import NearWallet
-
-# mpc = MpcContract(connection, contract_id)
-# signer = MpcSigner(mpc)
-# wallet = NearWallet(provider, signer)
-# await wallet.send_some_transaction(...)

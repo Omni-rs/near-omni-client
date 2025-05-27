@@ -72,6 +72,23 @@ async def test_view_access_key_full_access():
 
 
 @pytest.mark.asyncio
+async def test_view_access_key_function_call_with_allowance():
+    mock_response = {
+        "jsonrpc": "2.0",
+        "result": {
+            "block_hash": "8sD3sRGZ7oRcW8ogT68NVgZK5bxTKfWmro8ZcNJuMTbr",
+            "block_height": 197978103,
+            "nonce": 175873512000493,
+            "permission": "FullAccess",
+        },
+        "id": "dontcare",
+    }
+
+    client = AccessKey(provider=MockProvider(mock_response))
+    res = await client.view_access_key("account.testnet", "ed25519:abc123")
+
+
+@pytest.mark.asyncio
 async def test_view_access_key_raises_unknown_block():
     mock_response = {
         "jsonrpc": "2.0",

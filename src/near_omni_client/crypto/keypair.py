@@ -1,7 +1,6 @@
 from .keypair_base import KeyPairBase
 from .keypair_ed25519 import KeyPairEd25519
 from .keypair_secp256k1 import KeyPairSecp256k1
-from base58 import b58decode
 
 
 class KeyPair:
