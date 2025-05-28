@@ -44,7 +44,7 @@ class NearClient:
         self.access_keys = AccessKey(provider)
         self.transactions = Transactions(provider)
 
-    async def get_account(self, account_id: str):
+    async def view_account(self, account_id: str):
         """
         Get account information.
 
@@ -70,7 +70,7 @@ class NearClient:
         """
         return await self.accounts.call_function(contract_id, method, args)
 
-    async def fetch_access_key(self, account_id: str, public_key: Union[str, PublicKey]):
+    async def view_access_key(self, account_id: str, public_key: Union[str, PublicKey]):
         """
         Fetch an access key for the given account and public key.
 
@@ -115,7 +115,7 @@ class NearClient:
         Returns:
             Dictionary with nonce and block_hash
         """
-        access_key = await self.fetch_access_key(account_id, public_key)
+        access_key = await self.view_access_key(account_id, public_key)
 
         return {
             "nonce": access_key.nonce + 1,  # Increment nonce for next transaction

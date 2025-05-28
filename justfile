@@ -26,5 +26,5 @@ format:
 format-check:
 	uv run ruff format . --check
 
-run-example:
-    uv run python -m examples.create_transaction
+run-example example:
+    uv run python -m examples.{{example}}
