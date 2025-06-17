@@ -1,4 +1,4 @@
-from network import Network
+from near_omni_client.networks import Network
 from pydantic import ValidationError
 import requests
 import time
@@ -8,6 +8,7 @@ from .attestation_service_types import (
     GetMessagesBadRequestResponse,
     GetMessagesNotFoundResponse,
 )
+
 
 class AttestationService:
     MAINNET_BASE_URL = "https://iris-api.circle.com/v2/messages"

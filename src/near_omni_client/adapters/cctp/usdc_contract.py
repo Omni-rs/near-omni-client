@@ -1,6 +1,7 @@
 from web3 import Web3
-from network import Network
-from wallet import Wallet
+from near_omni_client.networks import Network
+from near_omni_client.wallets import Wallet
+
 
 class USDCContract:
     """
@@ -8,11 +9,20 @@ class USDCContract:
     - testnet: https://developers.circle.com/stablecoins/usdc-on-test-networks
     - mainnet: https://developers.circle.com/stablecoins/usdc-on-main-networks
     """
+
     contract_addresses = {
-        Network.BASE_SEPOLIA: Web3.to_checksum_address("0x036CbD53842c5426634e7929541eC2318f3dCF7e"),
-        Network.BASE_MAINNET: Web3.to_checksum_address("0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"),
-        Network.ETHEREUM_SEPOLIA: Web3.to_checksum_address("0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"),
-        Network.ETHEREUM_MAINNET: Web3.to_checksum_address("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"),
+        Network.BASE_SEPOLIA: Web3.to_checksum_address(
+            "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+        ),
+        Network.BASE_MAINNET: Web3.to_checksum_address(
+            "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+        ),
+        Network.ETHEREUM_SEPOLIA: Web3.to_checksum_address(
+            "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"
+        ),
+        Network.ETHEREUM_MAINNET: Web3.to_checksum_address(
+            "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+        ),
     }
     abi = [
         {
@@ -20,10 +30,10 @@ class USDCContract:
             "type": "function",
             "inputs": [
                 {"name": "spender", "type": "address"},
-                {"name": "amount", "type": "uint256"}
+                {"name": "amount", "type": "uint256"},
             ],
             "outputs": [{"name": "", "type": "bool"}],
-            "stateMutability": "nonpayable"
+            "stateMutability": "nonpayable",
         }
     ]
 
@@ -34,7 +44,7 @@ class USDCContract:
 
         if not self.contract_address:
             raise ValueError(f"Unsupported network: {network}")
-        
+
         self.contract_address = Web3.to_checksum_address(self.contract_address)
         self.contract = Web3().eth.contract(None, abi=self.abi)  # no provider
 
@@ -44,17 +54,20 @@ class USDCContract:
         if not address:
             raise ValueError(f"Unsupported network: {network}")
         return address
-    
-    def approve(self, spender: str, amount: int, gas_limit: int = 1000000, wait: bool = True) -> str:
-        tx = self.contract.functions.approve(spender, amount).build_transaction({
-            "from": self.wallet.get_wallet_address(),
-            "to": self.contract_address,
-            "gas": gas_limit,
-            "nonce": self.wallet.get_nonce(self.network),
-            "chainId": self.wallet.get_chain_id(self.network),
-            "maxFeePerGas": Web3.to_wei(2, 'gwei'),
-            "maxPriorityFeePerGas": Web3.to_wei(1, 'gwei'),
-        })
-        
-        return self.wallet.send_transaction(self.network, tx, wait)
 
+    def approve(
+        self, spender: str, amount: int, gas_limit: int = 1000000, wait: bool = True
+    ) -> str:
+        tx = self.contract.functions.approve(spender, amount).build_transaction(
+            {
+                "from": self.wallet.get_wallet_address(),
+                "to": self.contract_address,
+                "gas": gas_limit,
+                "nonce": self.wallet.get_nonce(self.network),
+                "chainId": self.wallet.get_chain_id(self.network),
+                "maxFeePerGas": Web3.to_wei(2, "gwei"),
+                "maxPriorityFeePerGas": Web3.to_wei(1, "gwei"),
+            }
+        )
+
+        return self.wallet.send_transaction(self.network, tx, wait)
