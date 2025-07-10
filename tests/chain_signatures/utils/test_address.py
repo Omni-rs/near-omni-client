@@ -1,4 +1,5 @@
 from near_omni_client.chain_signatures.utils import get_evm_address, get_btc_legacy_address, get_btc_segwit_address
+from near_omni_client.chain_signatures import Kdf
 
 def test_get_evm_address():
     public_key_hex = (
@@ -33,3 +34,22 @@ def test_get_btc_segwit_address():
     segwit_addr = get_btc_segwit_address(public_key, network='testnet')
     # For testnet, segwit addresses typically start with "tb1"
     assert segwit_addr.startswith("tb1"), f"Unexpected testnet segwit address: {segwit_addr}"
+
+def test_calculate_address_for_rebalancer():
+    account_id = "rebalancer.testnet"
+    path = "rebalancer"
+    derived_pub_bytes = Kdf.get_derived_public_key(account_id, path, "testnet")
+    
+    evm_addr = get_evm_address(derived_pub_bytes)
+    
+    print(f"Derived EVM address for {account_id} at path {path}: {evm_addr}")
+
+
+def test_calculate_address_for_rebalancer():
+    account_id = "rebalancer-3.testnet"
+    path = "rebalancer"
+    derived_pub_bytes = Kdf.get_derived_public_key(account_id, path, "testnet")
+    
+    evm_addr = get_evm_address(derived_pub_bytes)
+    
+    print(f"Derived EVM address for {account_id} at path {path}: {evm_addr}")
