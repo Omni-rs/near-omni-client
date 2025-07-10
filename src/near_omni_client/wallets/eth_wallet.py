@@ -1,35 +1,80 @@
 from eth_account import Account
-from network import Network
-from provider import IProviderFactory
 from web3 import Web3
+
+from .interfaces.wallet import Wallet
+from near_omni_client.networks import Network
+from near_omni_client.providers import IProviderFactory
 from web3.exceptions import TimeExhausted
 
-class Wallet:
-    def __init__(self, private_key: str, provider_factory: IProviderFactory, supported_networks: list[Network]):
+
+class EthereumWallet(Wallet):
+    def __init__(
+        self,
+        private_key: str,
+        provider_factory: IProviderFactory,
+        supported_networks: list[Network],
+    ):
         self.private_key = private_key
         self.account = Account.from_key(private_key)
         self.provider_factory = provider_factory
         self.supported_networks = supported_networks
 
-        unsupported = [n for n in self.supported_networks if not self.provider_factory.is_network_supported(n)]
+        # Validate network support
+        unsupported = [
+            n for n in self.supported_networks if not self.provider_factory.is_network_supported(n)
+        ]
         if unsupported:
-            raise ValueError(f"Provider does not support the following networks: {[n.name for n in unsupported]}")
+            raise ValueError(
+                f"Provider does not support the following networks: {[n.name for n in unsupported]}"
+            )
 
     def get_web3(self, network: Network) -> Web3:
         return self.provider_factory.get_provider(network)
 
-    def get_wallet_address(self) -> str:
+    def get_address(self) -> str:
+        return self.account.address
+
+    def get_network(self) -> str:
+        return self.supported_networks[0].name  # Default network
+
+    def get_chain_id(self, network: Network) -> int:
+        return self.get_web3(network).eth.chain_id
+
+    async def get_balance(self, network: Network) -> int:
+        web3 = self.get_web3(network)
+        balance = await web3.eth.get_balance(self.get_address())
+        return Web3.from_wei(balance, "ether")
+
+    async def get_public_key(self) -> str:
         return self.account.address
 
     def get_nonce(self, network: Network) -> int:
         return self.get_web3(network).eth.get_transaction_count(self.account.address)
 
-    def send_transaction(self, network: Network, tx_data: dict, wait: bool = True, timeout: int = 300) -> str:
+    async def native_transfer(self, to: str, amount: str, network: Network) -> str:
         web3 = self.get_web3(network)
-        
+
+        tx = {
+            "nonce": await web3.eth.get_transaction_count(self.get_address()),
+            "to": to,
+            "value": web3.to_wei(amount, "ether"),
+            "gas": 21000,
+            "gasPrice": await web3.eth.gas_price,
+            "chainId": web3.eth.chain_id,
+        }
+
+        signed_tx = web3.eth.account.sign_transaction(tx, self.private_key)
+        tx_hash = await web3.eth.send_raw_transaction(signed_tx.rawTransaction)
+        return tx_hash.hex()
+
+    def send_transaction(
+        self, network: Network, tx_data: dict, wait: bool = True, timeout: int = 300
+    ) -> str:
+        web3 = self.get_web3(network)
+
         # Sign the transaction
         signed_tx = web3.eth.account.sign_transaction(tx_data, self.private_key)
-        
+
         # Send the transaction
         tx_hash = web3.eth.send_raw_transaction(signed_tx.raw_transaction)
         print(f"Transaction sent: 0x{tx_hash.hex()}")
@@ -43,26 +88,22 @@ class Wallet:
                 else:
                     raise RuntimeError(f"Transaction failed on-chain: 0x{tx_hash.hex()}")
             except TimeExhausted:
-                raise TimeoutError(f"Transaction not confirmed within {timeout} seconds: 0x{tx_hash.hex()}")
+                raise TimeoutError(
+                    f"Transaction not confirmed within {timeout} seconds: 0x{tx_hash.hex()}"
+                )
 
-        return tx_hash
+        return tx_hash.hex()
 
     def get_transaction_receipt(self, network: Network, tx_hash: str):
         return self.get_web3(network).eth.waitForTransactionReceipt(tx_hash)
 
-    def get_balance(self, network: Network, address: str = None) -> float:
-        web3 = self.get_web3(network)
-        addr = address or self.get_wallet_address()
-        balance = web3.eth.get_balance(addr)
-        return Web3.from_wei(balance, 'ether')
-
-    def get_chain_id(self, network: Network) -> int:
-        return self.get_web3(network).eth.chain_id
-    
     def wait_for_receipt(self, network: Network, tx_hash: str, timeout: int = 300):
         try:
-            receipt = self.get_web3(network).eth.wait_for_transaction_receipt(tx_hash, timeout=timeout)
+            receipt = self.get_web3(network).eth.wait_for_transaction_receipt(
+                tx_hash, timeout=timeout
+            )
             return receipt
         except TimeExhausted:
-            raise TimeoutError(f"Transaction {tx_hash.hex()} was not confirmed after {timeout} seconds.")
-
+            raise TimeoutError(
+                f"Transaction {tx_hash.hex()} was not confirmed after {timeout} seconds."
+            )
