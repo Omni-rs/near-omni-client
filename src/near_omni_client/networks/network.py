@@ -9,6 +9,8 @@ class Network(Enum):
     BASE_MAINNET = "base-mainnet"
     ETHEREUM_SEPOLIA = "eth-sepolia"
     ETHEREUM_MAINNET = "eth-mainnet"
+    NEAR_MAINNET = "near-mainnet"
+    NEAR_TESTNET = "near-testnet"
 
     @staticmethod
     def parse(value: str) -> "Network":

@@ -30,8 +30,8 @@ class NearClient:
             network: Network identifier ('mainnet', 'testnet', etc.)
         """
         if provider is None and provider_url is None:
-            # Default to testnet if neither is provided
-            provider_url = "https://rpc.testnet.near.org"
+            # Default to testnet if neither is provided, more info https://docs.near.org/api/rpc/providers
+            provider_url = "https://test.rpc.fastnear.com"
 
         if provider is None:
             provider = JsonRpcProvider(provider_url)
