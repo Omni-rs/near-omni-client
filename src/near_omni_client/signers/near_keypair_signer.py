@@ -5,7 +5,7 @@ from near_omni_client.crypto import KeyPair, KeyPairBase
 from near_omni_client.transactions import Transaction
 
 
-class KeypairSigner(ISigner):
+class NearKeypairSigner(ISigner):
     """Signer implementation using NEAR KeyPair (ED25519 or SECP256K1)"""
 
     def __init__(self, key: Union[str, KeyPairBase]):
