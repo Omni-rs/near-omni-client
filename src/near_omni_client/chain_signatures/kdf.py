@@ -13,7 +13,10 @@ class Kdf:
 
     EPSILON_PREFIX = EPSILON_DERIVATION_PREFIX
 
-    PUBLIC_KEYS: ClassVar[dict[str, str]] = {"mainnet": ROOT_PUBLIC_KEY_MAINNET, "testnet": ROOT_PUBLIC_KEY_TESTNET}
+    PUBLIC_KEYS: ClassVar[dict[str, str]] = {
+        "mainnet": ROOT_PUBLIC_KEY_MAINNET,
+        "testnet": ROOT_PUBLIC_KEY_TESTNET,
+    }
 
     @staticmethod
     def get_root_public_key(network: str = "mainnet") -> str:

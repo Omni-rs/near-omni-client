@@ -13,7 +13,11 @@ class AccessKeyInner(BaseModel):
     @classmethod
     def parse_permission(cls, data):
         """Parse the permission field to ensure it is in the correct format."""
-        if isinstance(data, dict) and isinstance(data.get("permission"), str) and data["permission"] == "FullAccess":
+        if (
+            isinstance(data, dict)
+            and isinstance(data.get("permission"), str)
+            and data["permission"] == "FullAccess"
+        ):
             data["permission"] = {"FullAccess": {}}
         return data
 
