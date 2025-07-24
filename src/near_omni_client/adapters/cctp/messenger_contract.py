@@ -71,6 +71,7 @@ class MessengerContract:
         gas_limit: int = 1000000,
         wait: bool = True,
     ) -> str:
+        """Deposit tokens for burn on the CCTP Messenger contract."""
         tx = self.contract.functions.depositForBurn(
             amount,
             destination_domain,

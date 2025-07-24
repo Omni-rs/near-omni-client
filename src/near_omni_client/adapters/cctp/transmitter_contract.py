@@ -5,8 +5,7 @@ from near_omni_client.wallets import Wallet
 
 
 class TransmitterContract:
-    """Transmitter contract for handling cross-chain messages.
-    """
+    """Transmitter contract for handling cross-chain messages."""
 
     # addresses obtained from https://developers.circle.com/stablecoins/evm-smart-contracts
     contract_addresses = {

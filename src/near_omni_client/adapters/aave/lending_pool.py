@@ -188,13 +188,14 @@ class LendingPool:
 
     @staticmethod
     def get_address_for_network(network: Network) -> str:
+        """Get the AAVE Lending Pool contract address for a specific network."""
         address = LendingPool.contract_addresses.get(network)
         if not address:
             raise ValueError(f"Unsupported network: {network}")
         return address
 
     def get_interest_rate(self, asset_address: str) -> float:
-        """Returns the current liquidity rate (APR %) for the given asset."""
+        """Return the current liquidity rate (APR %) for the given asset."""
         w3 = self.wallet.get_web3(self.network)
         contract = w3.eth.contract(address=self.contract_address, abi=self.abi)
         reserve_data = contract.functions.getReserveData(asset_address).call()
@@ -205,7 +206,7 @@ class LendingPool:
         return liquidity_rate_ray / 1e27 * 100
 
     def get_slope(self, asset_address: str) -> float:
-        """Returns the correct supply elasticity slope (as %), based on current usage ratio."""
+        """Return the correct supply elasticity slope (as %), based on current usage ratio."""
         w3 = self.wallet.get_web3(self.network)
 
         contract = w3.eth.contract(address=self.contract_address, abi=self.abi)
@@ -249,7 +250,7 @@ class LendingPool:
         self,
         asset_address: str,
         amount: int,
-        on_behalf_of: str = None,
+        on_behalf_of: str | None = None,
         referral_code: int = 0,
         gas_limit: int = 1000000,
         wait: bool = True,
@@ -288,7 +289,7 @@ class LendingPool:
         self,
         asset_address: str,
         amount: int,
-        to_address: str = None,
+        to_address: str | None = None,
         gas_limit: int = 1000000,
         wait: bool = True,
     ) -> str:

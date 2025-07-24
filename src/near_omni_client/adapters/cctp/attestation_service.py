@@ -13,6 +13,8 @@ from .attestation_service_types import (
 
 
 class AttestationService:
+    """Service for retrieving attestations from Circle's attestation service."""
+
     MAINNET_BASE_URL = "https://iris-api.circle.com/v2/messages"
     SANDBOX_BASE_URL = "https://iris-api-sandbox.circle.com/v2/messages"
     network_urls = {
@@ -29,6 +31,7 @@ class AttestationService:
             raise ValueError(f"Unsupported network: {network}")
 
     def retrieve_attestation(self, transaction_hash: str):
+        """Retrieve the attestation for a given transaction hash."""
         url = self.url.format(transaction_hash)
         print(f"Retrieving attestation from {url}")
         if not self.url:

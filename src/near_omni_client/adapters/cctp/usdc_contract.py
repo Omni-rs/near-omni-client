@@ -6,10 +6,7 @@ from near_omni_client.wallets import Wallet
 
 
 class USDCContract:
-    """Addresses obtained from:
-    - testnet: https://developers.circle.com/stablecoins/usdc-on-test-networks
-    - mainnet: https://developers.circle.com/stablecoins/usdc-on-main-networks
-    """
+    """Addresses obtained from https://developers.circle.com/stablecoins/usdc-on-test-networks and https://developers.circle.com/stablecoins/usdc-on-main-networks."""
 
     contract_addresses = {
         Network.BASE_SEPOLIA: Web3.to_checksum_address(
