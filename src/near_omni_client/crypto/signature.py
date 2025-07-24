@@ -1,4 +1,5 @@
 from typing import NamedTuple
+
 from .public_key import PublicKey
 
 

@@ -1,33 +1,31 @@
 import base58
 
-from typing import Optional, Union
+from near_omni_client.crypto import PublicKey
+from near_omni_client.json_rpc.access_keys import AccessKey
+from near_omni_client.json_rpc.accounts import Accounts
 from near_omni_client.json_rpc.interfaces.provider import IJsonRpcProvider
 from near_omni_client.json_rpc.providers import JsonRpcProvider
-from near_omni_client.json_rpc.accounts import Accounts
-from near_omni_client.json_rpc.access_keys import AccessKey
 from near_omni_client.json_rpc.transactions import Transactions, TxExecutionStatus
-from near_omni_client.crypto import PublicKey
 
 
 class NearClient:
-    """
-    Unified NEAR client that encapsulates all JSON RPC services.
+    """Unified NEAR client that encapsulates all JSON RPC services.
     Provides a clean interface to interact with the NEAR blockchain.
     """
 
     def __init__(
         self,
-        provider_url: Optional[str] = None,
-        provider: Optional[IJsonRpcProvider] = None,
+        provider_url: str | None = None,
+        provider: IJsonRpcProvider | None = None,
         network: str = "testnet",
     ):
-        """
-        Initialize the NEAR client with either a provider URL or a provider instance.
+        """Initialize the NEAR client with either a provider URL or a provider instance.
 
         Args:
             provider_url: URL to the NEAR RPC endpoint (optional if provider is given)
             provider: A JSON RPC provider instance (optional if provider_url is given)
             network: Network identifier ('mainnet', 'testnet', etc.)
+
         """
         if provider is None and provider_url is None:
             # Default to testnet if neither is provided, more info https://docs.near.org/api/rpc/providers
@@ -45,20 +43,19 @@ class NearClient:
         self.transactions = Transactions(provider)
 
     async def view_account(self, account_id: str):
-        """
-        Get account information.
+        """Get account information.
 
         Args:
             account_id: NEAR account ID
 
         Returns:
             Account information
+
         """
         return await self.accounts.view_account(account_id)
 
     async def call_contract(self, contract_id: str, method: str, args: dict):
-        """
-        Call a view method on a contract.
+        """Call a view method on a contract.
 
         Args:
             contract_id: Contract account ID
@@ -67,12 +64,12 @@ class NearClient:
 
         Returns:
             Function call result
+
         """
         return await self.accounts.call_function(contract_id, method, args)
 
-    async def view_access_key(self, account_id: str, public_key: Union[str, PublicKey]):
-        """
-        Fetch an access key for the given account and public key.
+    async def view_access_key(self, account_id: str, public_key: str | PublicKey):
+        """Fetch an access key for the given account and public key.
 
         Args:
             account_id: NEAR account ID
@@ -80,6 +77,7 @@ class NearClient:
 
         Returns:
             Access key information
+
         """
         if isinstance(public_key, PublicKey):
             public_key = public_key.to_string()
@@ -87,8 +85,7 @@ class NearClient:
         return await self.access_keys.view_access_key(account_id, public_key)
 
     async def send_raw_transaction(self, signed_tx_base64: str, wait_until: str = "final"):
-        """
-        Send a signed transaction.
+        """Send a signed transaction.
 
         Args:
             signed_tx_base64: Base64 encoded signed transaction
@@ -96,6 +93,7 @@ class NearClient:
 
         Returns:
             Transaction execution result
+
         """
         # Convert string status to enum
         wait_status = getattr(TxExecutionStatus, wait_until.upper())
@@ -104,9 +102,8 @@ class NearClient:
             signed_tx_base64=signed_tx_base64, wait_until=wait_status
         )
 
-    async def get_nonce_and_block_hash(self, account_id: str, public_key: Union[str, PublicKey]):
-        """
-        Gets the next nonce and recent block hash needed for transaction creation.
+    async def get_nonce_and_block_hash(self, account_id: str, public_key: str | PublicKey):
+        """Gets the next nonce and recent block hash needed for transaction creation.
 
         Args:
             account_id: NEAR account ID
@@ -114,6 +111,7 @@ class NearClient:
 
         Returns:
             Dictionary with nonce and block_hash
+
         """
         access_key = await self.view_access_key(account_id, public_key)
 

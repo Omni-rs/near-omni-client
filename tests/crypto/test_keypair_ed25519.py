@@ -1,7 +1,8 @@
 import hashlib
+
 import base58
 
-from near_omni_client.crypto import KeyPairEd25519, PublicKey, KeyPair
+from near_omni_client.crypto import KeyPair, KeyPairEd25519, PublicKey
 
 
 def sha256(msg: str) -> bytes:

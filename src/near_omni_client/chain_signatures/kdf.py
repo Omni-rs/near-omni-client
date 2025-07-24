@@ -1,4 +1,5 @@
 from hashlib import sha3_256
+
 from base58 import b58decode
 from ecdsa import SECP256k1
 from ecdsa.ellipticcurve import Point
@@ -13,8 +14,7 @@ class Kdf:
 
     @staticmethod
     def get_root_public_key(network: str = "mainnet") -> str:
-        """
-        Returns the root public key according to the network.
+        """Returns the root public key according to the network.
 
         :param network: "mainnet" or "testnet" (case insensitive)
         :return: The root public key string.
@@ -29,8 +29,7 @@ class Kdf:
 
     @staticmethod
     def derive_epsilon(account_id: str, path: str) -> int:
-        """
-        Deterministically derive an epsilon value from a NEAR account identifier and a derivation path.
+        """Deterministically derive an epsilon value from a NEAR account identifier and a derivation path.
 
         This function constructs the following string: "near-mpc-recovery v0.1.0 epsilon derivation:<account_id>,<path>"
         and applies SHA3-256 to it. The resulting 32-byte hash is then converted to an integer.
@@ -46,8 +45,7 @@ class Kdf:
 
     @staticmethod
     def derive_public_key(root_public_key_str: str, epsilon: int) -> bytes:
-        """
-        Derives a new public key from a root public key and an epsilon value.
+        """Derives a new public key from a root public key and an epsilon value.
 
         The root public key must be provided in the format:
             "secp256k1:<Base58 encoded 64 bytes>"
@@ -99,8 +97,7 @@ class Kdf:
 
     @staticmethod
     def get_derived_public_key(account_id: str, path: str, network: str) -> bytes:
-        """
-        Calculates the derived public key given a NEAR account, a derivation path and the network.
+        """Calculates the derived public key given a NEAR account, a derivation path and the network.
         The function uses the constant root public key for the given network.
 
         :param account_id: The NEAR account identifier.

@@ -1,4 +1,5 @@
-from typing import Any, List, Optional
+from typing import Any
+
 from pydantic import BaseModel
 
 
@@ -11,7 +12,7 @@ class CongestionInfo(BaseModel):
 
 class BlockChunk(BaseModel):
     balance_burnt: str
-    bandwidth_requests: Optional[Any]
+    bandwidth_requests: Any | None
     chunk_hash: str
     congestion_info: CongestionInfo
     encoded_length: int
@@ -28,25 +29,25 @@ class BlockChunk(BaseModel):
     shard_id: int
     signature: str
     tx_root: str
-    validator_proposals: List[Any]
+    validator_proposals: list[Any]
     validator_reward: str
 
 
 class BlockHeader(BaseModel):
-    approvals: List[Optional[str]]
+    approvals: list[str | None]
     block_body_hash: str
     block_merkle_root: str
     block_ordinal: int
-    challenges_result: List[Any]
+    challenges_result: list[Any]
     challenges_root: str
-    chunk_endorsements: List[List[int]]
+    chunk_endorsements: list[list[int]]
     chunk_headers_root: str
-    chunk_mask: List[bool]
+    chunk_mask: list[bool]
     chunk_receipts_root: str
     chunk_tx_root: str
     chunks_included: int
     epoch_id: str
-    epoch_sync_data_hash: Optional[str]
+    epoch_sync_data_hash: str | None
     gas_price: str
     hash: str
     height: int
@@ -65,13 +66,13 @@ class BlockHeader(BaseModel):
     timestamp: int
     timestamp_nanosec: str
     total_supply: str
-    validator_proposals: List[Any]
+    validator_proposals: list[Any]
     validator_reward: str
 
 
 class BlockResult(BaseModel):
     author: str
-    chunks: List[BlockChunk]
+    chunks: list[BlockChunk]
     header: BlockHeader
 
     @classmethod

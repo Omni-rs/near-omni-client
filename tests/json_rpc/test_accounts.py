@@ -1,7 +1,7 @@
 import pytest
 
-from near_omni_client.json_rpc.models import AccountResult, CallFunctionResult
 from near_omni_client.json_rpc.accounts import Accounts
+from near_omni_client.json_rpc.models import AccountResult, CallFunctionResult
 from tests.json_rpc.mocks import MockProvider
 
 

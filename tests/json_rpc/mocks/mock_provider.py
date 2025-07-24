@@ -1,5 +1,5 @@
-from near_omni_client.json_rpc.interfaces.provider import IJsonRpcProvider
 from near_omni_client.json_rpc.exceptions import JsonRpcError
+from near_omni_client.json_rpc.interfaces.provider import IJsonRpcProvider
 
 
 class MockProvider(IJsonRpcProvider):

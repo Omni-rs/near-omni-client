@@ -1,6 +1,5 @@
-from typing import Union
+from near_omni_client.json_rpc.exceptions import ERROR_MESSAGES, ERRORS, JsonRpcError
 from near_omni_client.json_rpc.interfaces.provider import IJsonRpcProvider
-from near_omni_client.json_rpc.exceptions import JsonRpcError, ERRORS, ERROR_MESSAGES
 from near_omni_client.json_rpc.models import ChunkResult
 
 
@@ -20,7 +19,7 @@ class Chunk:
         if not chunk_id and not (block_id is not None and shard_id is not None):
             raise ValueError("Must provide chunk_id or both block_id and shard_id")
 
-        params: dict[str, Union[str, int]] = {}
+        params: dict[str, str | int] = {}
         if chunk_id:
             params["chunk_id"] = chunk_id
         else:

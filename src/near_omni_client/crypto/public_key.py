@@ -1,9 +1,9 @@
-from nacl.signing import VerifyKey
-from nacl.exceptions import BadSignatureError
-from base58 import b58decode, b58encode
 import secp256k1
+from base58 import b58decode, b58encode
+from nacl.exceptions import BadSignatureError
+from nacl.signing import VerifyKey
 
-from .types import KeyType, KeySize
+from .types import KeySize, KeyType
 
 
 class PublicKey:
@@ -58,8 +58,7 @@ class PublicKey:
 
     @staticmethod
     def parse_key_type(s: str) -> KeyType:
-        """
-        Convert a string to a KeyType enum.
+        """Convert a string to a KeyType enum.
         Accepts 'ed25519' or 'secp256k1' (case-insensitive).
         """
         try:

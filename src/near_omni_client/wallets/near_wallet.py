@@ -1,9 +1,10 @@
 from decimal import Decimal
-from typing import Any, Union
+from typing import Any
 
-from near_omni_client.providers import IProviderFactory
 from near_omni_client.crypto.keypair import KeyPair
 from near_omni_client.networks import Network
+from near_omni_client.providers import IProviderFactory
+
 from .interfaces.wallet import Wallet
 
 
@@ -55,7 +56,7 @@ class NearWallet(Wallet):
     async def sign_and_send_transaction(
         self,
         network: Network,
-        tx_data: Union[dict, list[Any]],
+        tx_data: dict | list[Any],
         wait: bool = True,
         timeout: int = 300,
     ) -> str:

@@ -1,10 +1,11 @@
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
+
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class FunctionCallPermission(BaseModel):
-    allowance: Optional[str]
-    method_names: List[str]
+    allowance: str | None
+    method_names: list[str]
     receiver_id: str
 
 
@@ -15,17 +16,17 @@ class FullAccessPermission(BaseModel):
 class Permission(BaseModel):
     model_config = ConfigDict(validate_by_alias=True)
 
-    function_call: Optional[FunctionCallPermission] = Field(
+    function_call: FunctionCallPermission | None = Field(
         default=None, validation_alias="FunctionCall"
     )
-    full_access: Optional[FullAccessPermission] = Field(default=None, validation_alias="FullAccess")
+    full_access: FullAccessPermission | None = Field(default=None, validation_alias="FullAccess")
 
 
 class AccessKeyResult(BaseModel):
     block_hash: str
     block_height: int
     nonce: int
-    permission: Union[str, Permission]
+    permission: str | Permission
 
     @classmethod
     def from_json_response(cls, rpc_response: dict) -> "AccessKeyResult":
@@ -33,7 +34,7 @@ class AccessKeyResult(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def transform_permission(cls, data: Dict[str, Any]) -> Dict[str, Any]:
+    def transform_permission(cls, data: dict[str, Any]) -> dict[str, Any]:
         # only if permission is a string "FullAccess", transform it
         if isinstance(data.get("permission"), str) and data["permission"] == "FullAccess":
             data["permission"] = {"FullAccess": {}}

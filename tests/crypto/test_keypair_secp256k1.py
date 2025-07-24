@@ -1,4 +1,5 @@
 import hashlib
+
 import base58
 
 from near_omni_client.crypto import KeyPairSecp256k1, PublicKey

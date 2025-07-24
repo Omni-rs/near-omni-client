@@ -2,8 +2,7 @@ import pytest
 
 from near_omni_client.json_rpc.chunk import Chunk
 from near_omni_client.json_rpc.models import ChunkResult
-from tests.json_rpc.mocks import MockProvider
-from tests.json_rpc.mocks import mock_chunk_response
+from tests.json_rpc.mocks import MockProvider, mock_chunk_response
 
 
 @pytest.mark.asyncio

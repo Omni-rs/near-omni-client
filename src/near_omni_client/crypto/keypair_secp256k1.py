@@ -1,17 +1,16 @@
 import os
-from base58 import b58encode, b58decode
-from secp256k1 import PrivateKey as Secp256k1PrivateKey, PublicKey as Secp256k1PublicKey
-from nacl.signing import SigningKey
-from .types import KeySize, KeyPairString, KeyType
+
+from base58 import b58decode, b58encode
+from secp256k1 import PrivateKey as Secp256k1PrivateKey
+
 from .keypair_base import KeyPairBase
-from .signature import Signature
 from .public_key import PublicKey
-from nacl.encoding import RawEncoder
+from .signature import Signature
+from .types import KeyPairString, KeySize, KeyType
 
 
 class KeyPairSecp256k1(KeyPairBase):
-    """
-    Implements secp256k1 key pair functionality compatible with NEAR SDK:
+    """Implements secp256k1 key pair functionality compatible with NEAR SDK:
     - Accepts a base58-encoded secret-only (32-byte) or extended secret key (32-byte secret + 64-byte public).
     - Always derives public key from secret for consistency with SDK.
     - Serializes to `<curve>:<input-key>` (param unchanged) mimicking JS behavior.

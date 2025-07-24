@@ -1,5 +1,6 @@
-from near_omni_client.networks.network import Network
 from web3 import Web3
+
+from near_omni_client.networks.network import Network
 
 from ..interfaces.iprovider_factory import IProviderFactory
 
@@ -17,9 +18,7 @@ class LocalProvider(IProviderFactory):
         if not isinstance(network, Network):
             raise TypeError(f"Expected Network enum, got {type(network)}")
 
-        url = LocalProvider.BASE_URL_TEMPLATE.format(
-            network=network.value, port=self.PORT
-        )
+        url = LocalProvider.BASE_URL_TEMPLATE.format(network=network.value, port=self.PORT)
         return Web3(Web3.HTTPProvider(url))
 
     def is_network_supported(self, network: Network) -> bool:

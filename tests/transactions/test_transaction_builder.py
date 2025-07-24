@@ -1,6 +1,7 @@
 import pytest
 from py_near_primitives import Transaction as NearTransaction
-from near_omni_client.transactions import TransactionBuilder, ActionFactory
+
+from near_omni_client.transactions import ActionFactory, TransactionBuilder
 
 
 def test_transaction_builder_missing_fields():
@@ -19,7 +20,6 @@ def test_transaction_builder_success():
     nonce = 42
     receiver_id = "bob.testnet"
     block_hash = b"\x02" * 32
-    priority_fee = 99
     create_account_action = ActionFactory.create_account()
 
     tx = (

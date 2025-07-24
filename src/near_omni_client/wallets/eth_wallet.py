@@ -1,11 +1,13 @@
-from typing import Any, Union
+from typing import Any
+
 from eth_account import Account
 from web3 import Web3
+from web3.exceptions import TimeExhausted
 
-from .interfaces.wallet import Wallet
 from near_omni_client.networks import Network
 from near_omni_client.providers import IProviderFactory
-from web3.exceptions import TimeExhausted
+
+from .interfaces.wallet import Wallet
 
 
 class EthereumWallet(Wallet):
@@ -112,7 +114,7 @@ class EthereumWallet(Wallet):
     async def sign_and_send_transaction(
         self,
         network: Network,
-        tx_data: Union[dict, list[Any]],
+        tx_data: dict | list[Any],
         wait: bool = True,
         timeout: int = 300,
     ) -> str:

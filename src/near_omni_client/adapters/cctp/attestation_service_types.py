@@ -1,17 +1,18 @@
+from typing import Literal
+
 from pydantic import BaseModel
-from typing import Optional, List, Literal
 
 
 class Message(BaseModel):
-    message: Optional[str]
+    message: str | None
     eventNonce: str
-    attestation: Optional[str]
+    attestation: str | None
     cctpVersion: int
     status: Literal["pending_confirmations", "complete"]
 
 
 class GetMessagesResponse(BaseModel):
-    messages: List[Message]
+    messages: list[Message]
 
 
 class GetMessagesBadRequestResponse(BaseModel):

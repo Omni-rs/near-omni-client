@@ -1,12 +1,14 @@
-from near_omni_client.networks import Network
-from pydantic import ValidationError
-import requests
 import time
 
+import requests
+from pydantic import ValidationError
+
+from near_omni_client.networks import Network
+
 from .attestation_service_types import (
-    GetMessagesResponse,
     GetMessagesBadRequestResponse,
     GetMessagesNotFoundResponse,
+    GetMessagesResponse,
 )
 
 

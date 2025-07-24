@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from typing import List
 
 
 class AccountResult(BaseModel):
@@ -19,8 +18,8 @@ class AccountResult(BaseModel):
 class CallFunctionResult(BaseModel):
     block_hash: str
     block_height: int
-    logs: List[str]
-    result: List[int]  # bytes as list of integers
+    logs: list[str]
+    result: list[int]  # bytes as list of integers
 
     @classmethod
     def from_json_response(cls, rpc_response: dict) -> "CallFunctionResult":

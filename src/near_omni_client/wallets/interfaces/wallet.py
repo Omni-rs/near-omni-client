@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from decimal import Decimal
-from typing import Any, Union
+from typing import Any
 
 from near_omni_client.networks.network import Network
 
@@ -15,10 +15,11 @@ class Wallet(ABC):
 
     @abstractmethod
     def get_network(self) -> Network:
-        """
-        Get the current network.
+        """Get the current network.
+
         Returns:
             Network: The network enum (e.g., ETH_MAINNET, ETH_SEPOLIA, NEAR_MAINNET, NEAR_TESTNET)
+
         """
         pass
 
@@ -39,8 +40,7 @@ class Wallet(ABC):
 
     @abstractmethod
     async def native_transfer(self, to: str, amount: str) -> str:
-        """
-        Transfer native tokens.
+        """Transfer native tokens.
         Returns: transaction hash
         """
         pass
@@ -49,12 +49,11 @@ class Wallet(ABC):
     async def sign_and_send_transaction(
         self,
         network: Network,
-        tx_data: Union[dict, list[Any]],  # dict for ETH, list[Action] for NEAR
+        tx_data: dict | list[Any],  # dict for ETH, list[Action] for NEAR
         wait: bool = True,
         timeout: int = 300,
     ) -> str:
-        """
-        Sign and send a raw transaction.
+        """Sign and send a raw transaction.
 
         Args:
             network: Network to use
@@ -68,5 +67,6 @@ class Wallet(ABC):
         Raises:
             TimeoutError: If wait=True and transaction is not mined within timeout
             RuntimeError: If wait=True and transaction fails on-chain
+
         """
         pass

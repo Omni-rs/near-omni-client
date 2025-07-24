@@ -1,7 +1,7 @@
-from near_omni_client.crypto import PublicKey, KeyType
-
 import base58
 import pytest
+
+from near_omni_client.crypto import KeyType, PublicKey
 
 
 def test_public_key_from_too_short_string():

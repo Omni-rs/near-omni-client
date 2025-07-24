@@ -1,12 +1,13 @@
 import hashlib
+
 from base58 import b58encode
 from eth_hash.auto import keccak
+
 from near_omni_client.chain_signatures.segwit_addr import bech32_encode, convertbits
 
 
 def get_evm_address(public_key: bytes) -> str:
-    """
-    Computes the Ethereum address from an uncompressed public key.
+    """Computes the Ethereum address from an uncompressed public key.
 
     The public key is expected to be 65 bytes with a leading 0x04.
     According to Ethereum specifications, the 0x04 is dropped and the
@@ -29,8 +30,7 @@ def get_evm_address(public_key: bytes) -> str:
 
 
 def get_btc_legacy_address(public_key: bytes, network: str = "bitcoin") -> str:
-    """
-    Computes the Bitcoin legacy (P2PKH) address from a public key.
+    """Computes the Bitcoin legacy (P2PKH) address from a public key.
 
     Steps:
       1. Compute SHA256, then RIPEMD160 of the public key.
@@ -55,8 +55,7 @@ def get_btc_legacy_address(public_key: bytes, network: str = "bitcoin") -> str:
 
 
 def get_btc_segwit_address(public_key: bytes, network: str = "bitcoin") -> str:
-    """
-    Computes the Bitcoin SegWit (P2WPKH) address from a public key.
+    """Computes the Bitcoin SegWit (P2WPKH) address from a public key.
 
     Steps:
       1. Compute SHA256, then RIPEMD160 of the public key.

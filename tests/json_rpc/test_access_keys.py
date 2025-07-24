@@ -2,14 +2,14 @@ import pytest
 
 from near_omni_client.json_rpc.access_keys import AccessKey
 from near_omni_client.json_rpc.exceptions import (
-    UnknownBlockError,
+    InternalError,
     InvalidAccountError,
-    UnknownAccountError,
-    UnknownAccessKeyError,
-    UnavailableShardError,
     NoSyncedBlocksError,
     ParseError,
-    InternalError,
+    UnavailableShardError,
+    UnknownAccessKeyError,
+    UnknownAccountError,
+    UnknownBlockError,
 )
 from tests.json_rpc.mocks import MockProvider
 

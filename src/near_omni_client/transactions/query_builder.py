@@ -1,10 +1,10 @@
-from typing import Any, Optional
+from typing import Any
 
 
 class QueryBuilder:
     def __init__(self):
-        self._contract_id: Optional[str] = None
-        self._method_name: Optional[str] = None
+        self._contract_id: str | None = None
+        self._method_name: str | None = None
         self._args: dict[str, Any] = {}
 
     def with_contract_id(self, contract_id: str) -> "QueryBuilder":

@@ -1,5 +1,6 @@
-from near_omni_client.networks.network import Network
 from web3 import Web3
+
+from near_omni_client.networks.network import Network
 
 from ..interfaces.iprovider_factory import IProviderFactory
 

@@ -1,8 +1,9 @@
 import asyncio
 import os
 
-from near_omni_client.json_rpc.client import NearClient
 from dotenv import load_dotenv
+
+from near_omni_client.json_rpc.client import NearClient
 
 
 async def main():

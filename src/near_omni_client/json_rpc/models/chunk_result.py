@@ -1,11 +1,13 @@
-from typing import Any, List, Optional
+from typing import Any
+
 from pydantic import BaseModel, Field
+
 from .block_result import CongestionInfo
 
 
 class ChunkHeader(BaseModel):
     balance_burnt: str
-    bandwidth_requests: Optional[Any]
+    bandwidth_requests: Any | None
     chunk_hash: str
     congestion_info: CongestionInfo
     encoded_length: int
@@ -22,7 +24,7 @@ class ChunkHeader(BaseModel):
     shard_id: int
     signature: str
     tx_root: str
-    validator_proposals: List[Any]
+    validator_proposals: list[Any]
     validator_reward: str
 
 
@@ -38,7 +40,7 @@ class Action(BaseModel):
 
 
 class Transaction(BaseModel):
-    actions: List[Action]
+    actions: list[Action]
     hash: str
     nonce: int
     priority_fee: int
@@ -51,8 +53,8 @@ class Transaction(BaseModel):
 class ChunkResult(BaseModel):
     author: str
     header: ChunkHeader
-    receipts: List[Any]
-    transactions: List[Transaction]
+    receipts: list[Any]
+    transactions: list[Transaction]
 
     @classmethod
     def from_json_response(cls, rpc_response: dict) -> "ChunkResult":

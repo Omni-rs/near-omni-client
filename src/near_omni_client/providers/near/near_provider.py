@@ -1,6 +1,8 @@
-from ..interfaces.iprovider_factory import IProviderFactory
-from near_omni_client.networks.network import Network
 from near_omni_client.json_rpc.client import NearClient
+from near_omni_client.networks.network import Network
+
+from ..interfaces.iprovider_factory import IProviderFactory
+
 
 class NearFactoryProvider(IProviderFactory):
     URL_TESTNET = "https://test.rpc.fastnear.com"
@@ -18,10 +20,9 @@ class NearFactoryProvider(IProviderFactory):
 
         if network == Network.NEAR_TESTNET:
             return NearClient(url=self.URL_TESTNET)
-        
+
         if network == Network.NEAR_MAINNET:
             return NearClient(url=self.URL_MAINNET)
 
     def is_network_supported(self, network: Network) -> bool:
         return network in self.supported_networks
-

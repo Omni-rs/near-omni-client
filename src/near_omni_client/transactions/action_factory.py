@@ -1,22 +1,24 @@
-from enum import Enum
-from typing import Any, Dict, List, Union
-import base58
 import json
+from enum import Enum
+from typing import Any
 
+import base58
 from py_near_primitives import (
-    CreateAccountAction,
-    DeployContractAction,
-    FunctionCallAction as NearFunctionCallAction,
-    TransferAction,
-    StakeAction,
-    AddKeyAction,
-    DeleteKeyAction,
-    DeleteAccountAction,
-    DelegateAction,
-    SignedDelegateAction,
     AccessKey,
     AccessKeyPermissionFieldless,
+    AddKeyAction,
+    CreateAccountAction,
+    DelegateAction,
+    DeleteAccountAction,
+    DeleteKeyAction,
+    DeployContractAction,
     FunctionCallPermission,
+    SignedDelegateAction,
+    StakeAction,
+    TransferAction,
+)
+from py_near_primitives import (
+    FunctionCallAction as NearFunctionCallAction,
 )
 
 
@@ -44,7 +46,7 @@ class ActionFactory:
 
     @staticmethod
     def function_call(
-        method_name: str, args: Union[bytes, Dict[str, Any]], gas: int, deposit: int
+        method_name: str, args: bytes | dict[str, Any], gas: int, deposit: int
     ) -> NearFunctionCallAction:
         if isinstance(args, dict):
             args = json.dumps(args).encode("utf-8")
@@ -55,7 +57,7 @@ class ActionFactory:
         return TransferAction(deposit)
 
     @staticmethod
-    def stake(amount: int, public_key: Union[str, bytes]) -> StakeAction:
+    def stake(amount: int, public_key: str | bytes) -> StakeAction:
         if isinstance(public_key, str):
             key = base58.b58decode(public_key.replace("ed25519:", ""))
         else:
@@ -63,7 +65,7 @@ class ActionFactory:
         return StakeAction(amount, key)
 
     @staticmethod
-    def add_full_access_key(public_key: Union[str, bytes]) -> AddKeyAction:
+    def add_full_access_key(public_key: str | bytes) -> AddKeyAction:
         if isinstance(public_key, str):
             key = base58.b58decode(public_key.replace("ed25519:", ""))
         else:
@@ -75,7 +77,7 @@ class ActionFactory:
 
     @staticmethod
     def add_function_call_key(
-        public_key: Union[str, bytes], allowance: int, receiver_id: str, methods: List[str]
+        public_key: str | bytes, allowance: int, receiver_id: str, methods: list[str]
     ) -> AddKeyAction:
         if isinstance(public_key, str):
             key = base58.b58decode(public_key.replace("ed25519:", ""))
@@ -85,7 +87,7 @@ class ActionFactory:
         return AddKeyAction(public_key=key, access_key=AccessKey(0, permission))
 
     @staticmethod
-    def delete_key(public_key: Union[str, bytes]) -> DeleteKeyAction:
+    def delete_key(public_key: str | bytes) -> DeleteKeyAction:
         if isinstance(public_key, str):
             key = base58.b58decode(public_key.replace("ed25519:", ""))
         else:

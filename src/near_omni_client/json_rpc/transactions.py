@@ -1,8 +1,8 @@
-from typing import Optional
-from near_omni_client.json_rpc.interfaces.provider import IJsonRpcProvider
-from near_omni_client.json_rpc.exceptions import JsonRpcError, ERRORS, ERROR_MESSAGES
-from near_omni_client.json_rpc.models import TransactionResult
 from enum import Enum
+
+from near_omni_client.json_rpc.exceptions import ERROR_MESSAGES, ERRORS, JsonRpcError
+from near_omni_client.json_rpc.interfaces.provider import IJsonRpcProvider
+from near_omni_client.json_rpc.models import TransactionResult
 
 
 class TxExecutionStatus(str, Enum):
@@ -33,7 +33,7 @@ class Transactions:
         self,
         *,
         signed_tx_base64: str,
-        wait_until: Optional[TxExecutionStatus] = None,
+        wait_until: TxExecutionStatus | None = None,
     ) -> TransactionResult:
         params: dict[str, object] = {"signed_tx_base64": signed_tx_base64}
         if wait_until is not None:

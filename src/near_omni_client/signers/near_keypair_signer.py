@@ -1,19 +1,20 @@
 import base64
-from typing import Union, Optional
-from .interfaces.signer import ISigner
+
 from near_omni_client.crypto import KeyPair, KeyPairBase
 from near_omni_client.transactions import Transaction
+
+from .interfaces.signer import ISigner
 
 
 class NearKeypairSigner(ISigner):
     """Signer implementation using NEAR KeyPair (ED25519 or SECP256K1)"""
 
-    def __init__(self, key: Union[str, KeyPairBase]):
-        """
-        Initialize KeypairSigner with a private key or KeyPair instance.
+    def __init__(self, key: str | KeyPairBase):
+        """Initialize KeypairSigner with a private key or KeyPair instance.
 
         Args:
             key: Either a string in format "curve:encoded_key" or a KeyPairBase instance
+
         """
         if isinstance(key, str):
             self._key_pair = KeyPair.from_string(key)
@@ -26,7 +27,7 @@ class NearKeypairSigner(ISigner):
         return self._key_pair.public_key
 
     @property
-    def account_id(self) -> Optional[str]:
+    def account_id(self) -> str | None:
         """Get the account ID if available"""
         return getattr(self, "_account_id", None)
 
@@ -36,27 +37,27 @@ class NearKeypairSigner(ISigner):
         self._account_id = value
 
     def sign(self, data: bytes) -> bytes:
-        """
-        Sign arbitrary bytes with the private key.
+        """Sign arbitrary bytes with the private key.
 
         Args:
             data: Raw bytes to sign
 
         Returns:
             Signature bytes
+
         """
         signature = self._key_pair.sign(data)
         return signature.signature
 
     def sign_base64(self, tx: Transaction) -> str:
-        """
-        Sign a transaction and return the base64 encoded signed transaction.
+        """Sign a transaction and return the base64 encoded signed transaction.
 
         Args:
             tx: Transaction to sign
 
         Returns:
             Base64 encoded signed transaction
+
         """
         # Serialize transaction to bytes
         message = tx.get_message_to_sign()
@@ -72,8 +73,7 @@ class NearKeypairSigner(ISigner):
         return base64.b64encode(serialized_signed_tx).decode("utf-8")
 
     def verify(self, message: bytes, signature: bytes) -> bool:
-        """
-        Verify a signature for a message.
+        """Verify a signature for a message.
 
         Args:
             message: The original message that was signed
@@ -81,5 +81,6 @@ class NearKeypairSigner(ISigner):
 
         Returns:
             True if the signature is valid, False otherwise
+
         """
         return self._key_pair.verify(message, signature)

@@ -1,5 +1,7 @@
-from typing import Any, Union
+from typing import Any
+
 from py_near_primitives import Transaction as NearTransaction
+
 from .utils import decode_key
 
 
@@ -16,9 +18,8 @@ class TransactionBuilder:
         self._signer_id = signer_id
         return self
 
-    def with_public_key(self, public_key: Union[str, bytes]) -> "TransactionBuilder":
-        """
-        Sets the public key for the transaction.
+    def with_public_key(self, public_key: str | bytes) -> "TransactionBuilder":
+        """Sets the public key for the transaction.
 
         Args:
             public_key: Can be:
@@ -30,6 +31,7 @@ class TransactionBuilder:
 
         Raises:
             ValueError: If string key is not in "ed25519:base58" format
+
         """
         if isinstance(public_key, bytes):
             self._public_key = public_key

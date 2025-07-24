@@ -1,7 +1,9 @@
-import httpx
 from typing import Any
-from near_omni_client.json_rpc.interfaces.provider import IJsonRpcProvider
+
+import httpx
+
 from near_omni_client.json_rpc.exceptions import JsonRpcError
+from near_omni_client.json_rpc.interfaces.provider import IJsonRpcProvider
 
 
 class JsonRpcProvider(IJsonRpcProvider):

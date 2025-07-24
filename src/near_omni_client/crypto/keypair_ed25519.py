@@ -1,17 +1,17 @@
+import os
+
 from base58 import b58decode, b58encode
 from nacl import bindings
-import os
 from nacl.signing import SigningKey
 
 from .keypair_base import KeyPairBase
 from .public_key import PublicKey
 from .signature import Signature
-from .types import KeyType, KeyPairString, KeySize
+from .types import KeyPairString, KeySize, KeyType
 
 
 class KeyPairEd25519(KeyPairBase):
-    """
-    Implements Ed25519 key pair functionality exactly like @near-js/utils:
+    """Implements Ed25519 key pair functionality exactly like @near-js/utils:
     - Always decodes the extended key, uses only the first 32 bytes as secret.
     - Recalculates the public key from the secret.
     """

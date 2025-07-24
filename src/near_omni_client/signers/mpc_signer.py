@@ -3,15 +3,20 @@ import json
 
 from near_omni_client.json_rpc.client import NearClient
 from near_omni_client.signers import NearKeypairSigner
-from near_omni_client.transactions import TransactionBuilder, ActionFactory
+from near_omni_client.transactions import ActionFactory, TransactionBuilder
 
 from .interfaces.signer import ISigner
 
 
 class MpcSigner(ISigner):
-    def __init__(self, client: NearClient, signer: NearKeypairSigner, account_id: str,
+    def __init__(
+        self,
+        client: NearClient,
+        signer: NearKeypairSigner,
+        account_id: str,
         contract_id: str,
-        path: str,):
+        path: str,
+    ):
         self._near_client = client
         self.signer_account = signer
         self.account_id = account_id
@@ -23,15 +28,14 @@ class MpcSigner(ISigner):
 
         # get nonce and block hash for the transaction
         tx_meta = await self._near_client.get_nonce_and_block_hash(
-            account_id=self.account_id,
-            public_key=self.public_key
+            account_id=self.account_id, public_key=self.public_key
         )
 
         action = ActionFactory.function_call(
             method_name="sign_hash",
             args={"hash": encoded_hash, "path": self.path},
             gas=300_000_000_000_000,
-            deposit=1
+            deposit=1,
         )
 
         # build the transaction
@@ -56,17 +60,17 @@ class MpcSigner(ISigner):
 
     def _extract_signature_from_result(self, result):
         """Extract the signature from the transaction result"""
-        
-        if hasattr(result, 'status'):
-            
-            if isinstance(result.status, dict) and 'SuccessValue' in result.status:
-                success_value = result.status['SuccessValue']
+        if hasattr(result, "status"):
+            if isinstance(result.status, dict) and "SuccessValue" in result.status:
+                success_value = result.status["SuccessValue"]
                 decoded_bytes = base64.b64decode(success_value)
-                decoded_json = json.loads(decoded_bytes.decode('utf-8'))
+                decoded_json = json.loads(decoded_bytes.decode("utf-8"))
                 return decoded_json
             else:
-                print(f"Debug - result.status keys: {result.status.keys() if hasattr(result.status, 'keys') else 'No keys'}")
+                print(
+                    f"Debug - result.status keys: {result.status.keys() if hasattr(result.status, 'keys') else 'No keys'}"
+                )
                 raise Exception(f"Unexpected result structure: {result.status}")
         else:
-            print(f"Debug - result has no status attribute")
+            print("Debug - result has no status attribute")
             return None

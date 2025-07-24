@@ -1,4 +1,5 @@
 from web3 import Web3
+
 from near_omni_client.networks import Network
 from near_omni_client.wallets import Wallet
 
@@ -54,52 +55,74 @@ class LendingPool:
             "payable": False,
         },
         {
-    "name": "getReserveData",
-    "type": "function",
-    "stateMutability": "view",
-    "inputs": [
-        {
-            "internalType": "address",
-            "name": "asset",
-            "type": "address"
-        }
-    ],
-    "outputs": [
-        {
-            "components": [
+            "name": "getReserveData",
+            "type": "function",
+            "stateMutability": "view",
+            "inputs": [{"internalType": "address", "name": "asset", "type": "address"}],
+            "outputs": [
                 {
-                    "internalType": "struct DataTypes.ReserveConfigurationMap",
-                    "name": "configuration",
-                    "type": "tuple",
                     "components": [
                         {
-                            "internalType": "uint256",
-                            "name": "data",
-                            "type": "uint256"
-                        }
-                    ]
-                },
-                { "internalType": "uint128", "name": "liquidityIndex", "type": "uint128" },
-                { "internalType": "uint128", "name": "currentLiquidityRate", "type": "uint128" },
-                { "internalType": "uint128", "name": "variableBorrowIndex", "type": "uint128" },
-                { "internalType": "uint128", "name": "currentVariableBorrowRate", "type": "uint128" },
-                { "internalType": "uint128", "name": "currentStableBorrowRate", "type": "uint128" },
-                { "internalType": "uint40",  "name": "lastUpdateTimestamp", "type": "uint40" },
-                { "internalType": "uint16",  "name": "id", "type": "uint16" },
-                { "internalType": "address", "name": "aTokenAddress", "type": "address" },
-                { "internalType": "address", "name": "stableDebtTokenAddress", "type": "address" },
-                { "internalType": "address", "name": "variableDebtTokenAddress", "type": "address" },
-                { "internalType": "address", "name": "interestRateStrategyAddress", "type": "address" },
-                { "internalType": "uint128", "name": "accruedToTreasury", "type": "uint128" },
-                { "internalType": "uint128", "name": "unbacked", "type": "uint128" },
-                { "internalType": "uint128", "name": "isolationModeTotalDebt", "type": "uint128" }
+                            "internalType": "struct DataTypes.ReserveConfigurationMap",
+                            "name": "configuration",
+                            "type": "tuple",
+                            "components": [
+                                {"internalType": "uint256", "name": "data", "type": "uint256"}
+                            ],
+                        },
+                        {"internalType": "uint128", "name": "liquidityIndex", "type": "uint128"},
+                        {
+                            "internalType": "uint128",
+                            "name": "currentLiquidityRate",
+                            "type": "uint128",
+                        },
+                        {
+                            "internalType": "uint128",
+                            "name": "variableBorrowIndex",
+                            "type": "uint128",
+                        },
+                        {
+                            "internalType": "uint128",
+                            "name": "currentVariableBorrowRate",
+                            "type": "uint128",
+                        },
+                        {
+                            "internalType": "uint128",
+                            "name": "currentStableBorrowRate",
+                            "type": "uint128",
+                        },
+                        {"internalType": "uint40", "name": "lastUpdateTimestamp", "type": "uint40"},
+                        {"internalType": "uint16", "name": "id", "type": "uint16"},
+                        {"internalType": "address", "name": "aTokenAddress", "type": "address"},
+                        {
+                            "internalType": "address",
+                            "name": "stableDebtTokenAddress",
+                            "type": "address",
+                        },
+                        {
+                            "internalType": "address",
+                            "name": "variableDebtTokenAddress",
+                            "type": "address",
+                        },
+                        {
+                            "internalType": "address",
+                            "name": "interestRateStrategyAddress",
+                            "type": "address",
+                        },
+                        {"internalType": "uint128", "name": "accruedToTreasury", "type": "uint128"},
+                        {"internalType": "uint128", "name": "unbacked", "type": "uint128"},
+                        {
+                            "internalType": "uint128",
+                            "name": "isolationModeTotalDebt",
+                            "type": "uint128",
+                        },
+                    ],
+                    "internalType": "struct DataTypes.ReserveDataLegacy",
+                    "name": "res",
+                    "type": "tuple",
+                }
             ],
-            "internalType": "struct DataTypes.ReserveDataLegacy",
-            "name": "res",
-            "type": "tuple"
-        }
-    ]
-        }
+        },
     ]
     interest_rate_strategy_abi = [
         {
@@ -107,21 +130,21 @@ class LendingPool:
             "type": "function",
             "inputs": [{"name": "reserve", "type": "address"}],
             "outputs": [{"name": "", "type": "uint256"}],
-            "stateMutability": "view"
+            "stateMutability": "view",
         },
         {
             "name": "getVariableRateSlope1",
             "type": "function",
             "inputs": [{"name": "reserve", "type": "address"}],
             "outputs": [{"name": "", "type": "uint256"}],
-            "stateMutability": "view"
+            "stateMutability": "view",
         },
         {
             "name": "getVariableRateSlope2",
             "type": "function",
             "inputs": [{"name": "reserve", "type": "address"}],
             "outputs": [{"name": "", "type": "uint256"}],
-            "stateMutability": "view"
+            "stateMutability": "view",
         },
     ]
 
@@ -133,7 +156,7 @@ class LendingPool:
             "outputs": [{"name": "", "type": "uint256"}],
             "payable": False,
             "stateMutability": "view",
-            "type": "function"
+            "type": "function",
         },
         {
             "constant": True,
@@ -142,8 +165,8 @@ class LendingPool:
             "outputs": [{"name": "", "type": "uint256"}],
             "payable": False,
             "stateMutability": "view",
-            "type": "function"
-        }
+            "type": "function",
+        },
     ]
 
     def __init__(self, network: Network, wallet: Wallet):
@@ -155,7 +178,9 @@ class LendingPool:
             raise ValueError(f"Unsupported network: {network}")
 
         self.contract_address = Web3.to_checksum_address(self.contract_address)
-        self.contract = Web3().eth.contract(address=self.contract_address, abi=self.abi)  # provider not needed here
+        self.contract = Web3().eth.contract(
+            address=self.contract_address, abi=self.abi
+        )  # provider not needed here
 
     @staticmethod
     def get_address_for_network(network: Network) -> str:
@@ -165,9 +190,7 @@ class LendingPool:
         return address
 
     def get_interest_rate(self, asset_address: str) -> float:
-        """
-        Returns the current liquidity rate (APR %) for the given asset.
-        """
+        """Returns the current liquidity rate (APR %) for the given asset."""
         w3 = self.wallet.get_web3(self.network)
         contract = w3.eth.contract(address=self.contract_address, abi=self.abi)
         reserve_data = contract.functions.getReserveData(asset_address).call()
@@ -176,11 +199,9 @@ class LendingPool:
         liquidity_rate_ray = reserve_data[2]  # or 'currentLiquidityRate'
         # Convert from ray to %
         return liquidity_rate_ray / 1e27 * 100
-    
+
     def get_slope(self, asset_address: str) -> float:
-        """
-        Returns the correct supply elasticity slope (as %), based on current usage ratio.
-        """
+        """Returns the correct supply elasticity slope (as %), based on current usage ratio."""
         w3 = self.wallet.get_web3(self.network)
 
         contract = w3.eth.contract(address=self.contract_address, abi=self.abi)
@@ -193,8 +214,10 @@ class LendingPool:
         a_token = reserve_data[8]
         variable_debt_token = reserve_data[10]
         strategy_address = reserve_data[11]
-        
-        print(f"asset_address: {asset_address}, a_token: {a_token}, variable_debt_token: {variable_debt_token}, strategy_address: {strategy_address}")
+
+        print(
+            f"asset_address: {asset_address}, a_token: {a_token}, variable_debt_token: {variable_debt_token}, strategy_address: {strategy_address}"
+        )
 
         # get real balances
         a_token_contract = w3.eth.contract(address=a_token, abi=self.erc20_abi)
@@ -227,8 +250,7 @@ class LendingPool:
         gas_limit: int = 1000000,
         wait: bool = True,
     ) -> str:
-        """
-        Supply assets to the AAVE protocol.
+        """Supply assets to the AAVE protocol.
 
         Args:
             asset_address: Address of the asset to supply
@@ -237,6 +259,7 @@ class LendingPool:
             referral_code: Code used to register the integrator (0 if none)
             gas_limit: Maximum gas to use
             wait: Whether to wait for transaction confirmation
+
         """
         if on_behalf_of is None:
             on_behalf_of = self.wallet.get_address()
@@ -265,8 +288,7 @@ class LendingPool:
         gas_limit: int = 1000000,
         wait: bool = True,
     ) -> str:
-        """
-        Withdraw assets from the AAVE protocol.
+        """Withdraw assets from the AAVE protocol.
 
         Args:
             asset_address: Address of the asset to withdraw
@@ -274,6 +296,7 @@ class LendingPool:
             to_address: Address that will receive the withdrawn assets (defaults to sender)
             gas_limit: Maximum gas to use
             wait: Whether to wait for transaction confirmation
+
         """
         if to_address is None:
             to_address = self.wallet.get_address()

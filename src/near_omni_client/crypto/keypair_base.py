@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
+
+from .public_key import PublicKey
 from .signature import Signature
 from .types import KeyPairString
-from .public_key import PublicKey
 
 
 class KeyPairBase(ABC):
