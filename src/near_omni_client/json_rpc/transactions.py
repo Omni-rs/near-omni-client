@@ -6,6 +6,8 @@ from near_omni_client.json_rpc.models import TransactionResult
 
 
 class TxExecutionStatus(str, Enum):
+    """Enum for transaction execution statuses."""
+
     # Transaction is waiting to be included into the block
     NONE = "NONE"
     # Transaction is included into the block. The block may be not finalized yet
@@ -26,6 +28,8 @@ class TxExecutionStatus(str, Enum):
 
 
 class Transactions:
+    """Class for sending transactions using a JSON-RPC provider."""
+
     def __init__(self, provider: IJsonRpcProvider):
         self.provider = provider
 
@@ -35,6 +39,7 @@ class Transactions:
         signed_tx_base64: str,
         wait_until: TxExecutionStatus | None = None,
     ) -> TransactionResult:
+        """Send a signed transaction to the NEAR network."""
         params: dict[str, object] = {"signed_tx_base64": signed_tx_base64}
         if wait_until is not None:
             params["wait_until"] = wait_until

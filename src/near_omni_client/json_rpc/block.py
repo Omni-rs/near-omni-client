@@ -4,12 +4,15 @@ from near_omni_client.json_rpc.models import BlockResult
 
 
 class Block:
+    """Class to interact with NEAR blockchain blocks via JSON RPC."""
+
     def __init__(self, provider: IJsonRpcProvider):
         self.provider = provider
 
     async def view_block(
         self, *, finality: str | None = None, block_id: int | str | None = None
     ) -> BlockResult:
+        """Get information about a block by its finality or block ID."""
         if finality and block_id:
             raise ValueError("Cannot provide both finality and block_id")
 

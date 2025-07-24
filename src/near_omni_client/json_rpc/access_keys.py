@@ -4,12 +4,15 @@ from near_omni_client.json_rpc.models import AccessKeyListResult, AccessKeyResul
 
 
 class AccessKey:
+    """Class to interact with NEAR blockchain access keys via JSON RPC."""
+
     def __init__(self, provider: IJsonRpcProvider):
         self.provider = provider
 
     async def view_access_key(
         self, account_id: str, public_key: str, finality: str = "final"
     ) -> AccessKeyResult:
+        """Fetch an access key for the given account and public key."""
         try:
             res = await self.provider.call(
                 "query",
@@ -31,6 +34,7 @@ class AccessKey:
     async def view_access_key_list(
         self, account_id: str, finality: str = "final"
     ) -> AccessKeyListResult:
+        """Fetch a list of access keys for the given account."""
         try:
             res = await self.provider.call(
                 "query",

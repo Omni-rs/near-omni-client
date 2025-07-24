@@ -6,6 +6,8 @@ from .utils import decode_key
 
 
 class TransactionBuilder:
+    """Builder for creating NEAR transactions."""
+
     def __init__(self):
         self._signer_id: str | None = None
         self._public_key: bytes | None = None
@@ -15,11 +17,12 @@ class TransactionBuilder:
         self._actions: list[Any] = []
 
     def with_signer_id(self, signer_id: str) -> "TransactionBuilder":
+        """Set the signer ID for the transaction."""
         self._signer_id = signer_id
         return self
 
     def with_public_key(self, public_key: str | bytes) -> "TransactionBuilder":
-        """Sets the public key for the transaction.
+        """Set the public key for the transaction.
 
         Args:
             public_key: Can be:
@@ -44,22 +47,27 @@ class TransactionBuilder:
         return self
 
     def with_nonce(self, nonce: int) -> "TransactionBuilder":
+        """Set the nonce for the transaction."""
         self._nonce = nonce
         return self
 
     def with_receiver(self, receiver_id: str) -> "TransactionBuilder":
+        """Set the receiver ID for the transaction."""
         self._receiver_id = receiver_id
         return self
 
     def with_block_hash(self, block_hash: bytes) -> "TransactionBuilder":
+        """Set the block hash for the transaction."""
         self._block_hash = block_hash
         return self
 
     def add_action(self, action: Any) -> "TransactionBuilder":
+        """Add an action to the transaction."""
         self._actions.append(action)
         return self
 
     def build(self) -> NearTransaction:
+        """Build the NEAR transaction object."""
         missing = [
             name
             for name, val in [

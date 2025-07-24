@@ -1,5 +1,6 @@
 class JsonRpcError(Exception):
     """Exception class for handling JSON-RPC errors.
+
     This class is designed to parse and store error information from a JSON-RPC response.
     The error information is expected to be in the following format:
     {
@@ -23,8 +24,13 @@ class JsonRpcError(Exception):
 
     @classmethod
     def from_response(cls, error_json: dict):
-        """Factory method to create a JsonRpcError instance from a JSON-RPC error response.
-        :param error_json: The JSON-RPC error response.
-        :return: An instance of JsonRpcError.
+        """Create a JsonRpcError instance from a JSON-RPC error response.
+
+        Args:
+            error_json (dict): The JSON-RPC error response containing error details.
+
+        Returns:
+            JsonRpcError: An instance of JsonRpcError initialized with the provided error details.
+
         """
         return cls(error_json)

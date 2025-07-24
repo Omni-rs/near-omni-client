@@ -1,16 +1,17 @@
+from typing import ClassVar
+
 from near_omni_client.json_rpc.exceptions import JsonRpcError
 from near_omni_client.json_rpc.interfaces.provider import IJsonRpcProvider
 
 
 class MockProvider(IJsonRpcProvider):
-    supported_request_types = {
+    supported_request_types: ClassVar[set[str]] = {
         "view_access_key_list",
         "view_access_key",
         "view_account",
         "call_function",
     }
-
-    supported_methods = {"query", "block", "chunk", "send_tx"}
+    supported_methods: ClassVar[set[str]] = {"query", "block", "chunk", "send_tx"}
 
     def __init__(self, response: dict):
         self.response = response

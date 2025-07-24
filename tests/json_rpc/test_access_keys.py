@@ -87,6 +87,8 @@ async def test_view_access_key_function_call_with_allowance():
     client = AccessKey(provider=MockProvider(mock_response))
     res = await client.view_access_key("account.testnet", "ed25519:abc123")
 
+    assert res.nonce == 175873512000493
+
 
 @pytest.mark.asyncio
 async def test_view_access_key_raises_unknown_block():

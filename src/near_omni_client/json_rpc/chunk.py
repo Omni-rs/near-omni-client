@@ -4,6 +4,8 @@ from near_omni_client.json_rpc.models import ChunkResult
 
 
 class Chunk:
+    """Class to interact with NEAR blockchain chunks via JSON RPC."""
+
     def __init__(self, provider: IJsonRpcProvider):
         self.provider = provider
 
@@ -14,6 +16,7 @@ class Chunk:
         block_id: int | str | None = None,
         shard_id: int | None = None,
     ) -> ChunkResult:
+        """Get information about a chunk by its ID or block and shard IDs."""
         if chunk_id and (block_id is not None or shard_id is not None):
             raise ValueError("Cannot provide both chunk_id and (block_id + shard_id)")
         if not chunk_id and not (block_id is not None and shard_id is not None):

@@ -7,7 +7,7 @@ from .interfaces.signer import ISigner
 
 
 class NearKeypairSigner(ISigner):
-    """Signer implementation using NEAR KeyPair (ED25519 or SECP256K1)"""
+    """Signer implementation using NEAR KeyPair (ED25519 or SECP256K1)."""
 
     def __init__(self, key: str | KeyPairBase):
         """Initialize KeypairSigner with a private key or KeyPair instance.
@@ -23,17 +23,17 @@ class NearKeypairSigner(ISigner):
 
     @property
     def public_key(self):
-        """Get the public key associated with this signer"""
+        """Get the public key associated with this signer."""
         return self._key_pair.public_key
 
     @property
     def account_id(self) -> str | None:
-        """Get the account ID if available"""
+        """Get the account ID if available."""
         return getattr(self, "_account_id", None)
 
     @account_id.setter
     def account_id(self, value: str):
-        """Set the account ID for this signer"""
+        """Set the account ID for this signer."""
         self._account_id = value
 
     def sign(self, data: bytes) -> bytes:

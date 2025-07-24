@@ -68,8 +68,10 @@ class PublicKey:
 
     @property
     def key_type(self) -> KeyType:
+        """Return the type of the public key."""
         return self._key_type
 
     @property
     def data(self) -> bytes:
+        """Return the raw public key data."""
         return self._data

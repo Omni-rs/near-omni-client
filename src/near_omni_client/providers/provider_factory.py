@@ -10,6 +10,8 @@ from .interfaces.iprovider_factory import IProviderFactory
 
 
 class FactoryProvider(IProviderFactory):
+    """Factory provider for creating instances of Web3 or NearClient based on the network."""
+
     def __init__(self):
         self.supported_networks = [
             Network.LOCALHOST,
@@ -22,6 +24,7 @@ class FactoryProvider(IProviderFactory):
         ]
 
     def get_provider(self, network: Network) -> Web3 | NearClient:
+        """Get a provider instance for the specified network."""
         if not isinstance(network, Network):
             raise TypeError(f"Expected Network enum, got {type(network)}")
 
@@ -42,4 +45,5 @@ class FactoryProvider(IProviderFactory):
         raise ValueError(f"Unsupported network: {network.name}")
 
     def is_network_supported(self, network: Network) -> bool:
+        """Check if the network is supported by the provider factory."""
         return network in self.supported_networks

@@ -9,9 +9,7 @@ from near_omni_client.json_rpc.transactions import Transactions, TxExecutionStat
 
 
 class NearClient:
-    """Unified NEAR client that encapsulates all JSON RPC services.
-    Provides a clean interface to interact with the NEAR blockchain.
-    """
+    """Unified NEAR client that encapsulates all JSON RPC services. Provides a clean interface to interact with the NEAR blockchain."""
 
     def __init__(
         self,
@@ -103,7 +101,7 @@ class NearClient:
         )
 
     async def get_nonce_and_block_hash(self, account_id: str, public_key: str | PublicKey):
-        """Gets the next nonce and recent block hash needed for transaction creation.
+        """Get the next nonce and recent block hash needed for transaction creation.
 
         Args:
             account_id: NEAR account ID

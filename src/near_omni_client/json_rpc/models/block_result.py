@@ -4,6 +4,8 @@ from pydantic import BaseModel
 
 
 class CongestionInfo(BaseModel):
+    """Model for congestion information in a NEAR block chunk."""
+
     allowed_shard: int
     buffered_receipts_gas: str
     delayed_receipts_gas: str
@@ -11,6 +13,8 @@ class CongestionInfo(BaseModel):
 
 
 class BlockChunk(BaseModel):
+    """Model for a NEAR block chunk."""
+
     balance_burnt: str
     bandwidth_requests: Any | None
     chunk_hash: str
@@ -34,6 +38,8 @@ class BlockChunk(BaseModel):
 
 
 class BlockHeader(BaseModel):
+    """Model for the header of a NEAR block."""
+
     approvals: list[str | None]
     block_body_hash: str
     block_merkle_root: str
@@ -71,10 +77,13 @@ class BlockHeader(BaseModel):
 
 
 class BlockResult(BaseModel):
+    """Model for the result of a NEAR block query."""
+
     author: str
     chunks: list[BlockChunk]
     header: BlockHeader
 
     @classmethod
     def from_json_response(cls, rpc_response: dict) -> "BlockResult":
+        """Create a BlockResult instance from a JSON-RPC response."""
         return cls.model_validate(rpc_response["result"])

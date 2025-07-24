@@ -9,6 +9,8 @@ from .interfaces.signer import ISigner
 
 
 class MpcSigner(ISigner):
+    """MPC Signer implementation for NEAR transactions."""
+
     def __init__(
         self,
         client: NearClient,
@@ -24,6 +26,7 @@ class MpcSigner(ISigner):
         self.path = path
 
     async def sign(self, data: bytes) -> bytes:
+        """Sign arbitrary bytes with the MPC signer."""
         encoded_hash = base64.b64encode(data).decode()
 
         # get nonce and block hash for the transaction
@@ -59,7 +62,7 @@ class MpcSigner(ISigner):
         return self._extract_signature_from_result(result)
 
     def _extract_signature_from_result(self, result):
-        """Extract the signature from the transaction result"""
+        """Extract the signature from the transaction result."""
         if hasattr(result, "status"):
             if isinstance(result.status, dict) and "SuccessValue" in result.status:
                 success_value = result.status["SuccessValue"]

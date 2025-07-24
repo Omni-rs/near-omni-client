@@ -51,7 +51,7 @@ def test_calculate_address_for_rebalancer():
     print(f"Derived EVM address for {account_id} at path {path}: {evm_addr}")
 
 
-def test_calculate_address_for_rebalancer():
+def test_calculate_address_for_rebalancer_3():
     account_id = "rebalancer-3.testnet"
     path = "rebalancer"
     derived_pub_bytes = Kdf.get_derived_public_key(account_id, path, "testnet")

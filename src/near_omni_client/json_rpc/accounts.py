@@ -7,6 +7,8 @@ from near_omni_client.json_rpc.models import AccountResult, CallFunctionResult
 
 
 class Accounts:
+    """Class to interact with NEAR blockchain accounts via JSON RPC."""
+
     def __init__(self, provider: IJsonRpcProvider):
         self.provider = provider
 
@@ -31,6 +33,7 @@ class Accounts:
     async def call_function(
         self, account_id: str, method_name: str, args: dict, finality: str = "final"
     ) -> CallFunctionResult:
+        """Call a function on a NEAR account with the given arguments."""
         try:
             encoded_args = base64.b64encode(json.dumps(args).encode("utf-8")).decode("utf-8")
             res = await self.provider.call(

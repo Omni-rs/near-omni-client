@@ -41,6 +41,7 @@ class Wallet(ABC):
     @abstractmethod
     async def native_transfer(self, to: str, amount: str) -> str:
         """Transfer native tokens.
+
         Returns: transaction hash
         """
         pass
