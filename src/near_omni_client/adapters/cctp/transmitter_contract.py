@@ -63,6 +63,7 @@ class TransmitterContract:
         gas_limit: int = 10000000,
         wait: bool = True,
     ) -> str:
+        """Mint USDC by sending a message to the transmitter contract."""
         tx = self.contract.functions.receiveMessage(
             attestation_message, attestation
         ).build_transaction(
