@@ -5,6 +5,7 @@ ETHEREUM_DOMAIN = "0"
 
 
 class Network(Enum):
+    LOCALHOST = "localhost"
     BASE_SEPOLIA = "base-sepolia"
     BASE_MAINNET = "base-mainnet"
     ETHEREUM_SEPOLIA = "eth-sepolia"

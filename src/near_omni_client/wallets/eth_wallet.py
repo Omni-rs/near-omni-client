@@ -1,3 +1,4 @@
+from typing import Any, Union
 from eth_account import Account
 from web3 import Web3
 
@@ -107,3 +108,12 @@ class EthereumWallet(Wallet):
             raise TimeoutError(
                 f"Transaction {tx_hash.hex()} was not confirmed after {timeout} seconds."
             )
+
+    async def sign_and_send_transaction(
+        self,
+        network: Network,
+        tx_data: Union[dict, list[Any]],
+        wait: bool = True,
+        timeout: int = 300,
+    ) -> str:
+        raise NotImplementedError("sign_and_send_transaction not implemented for NEAR wallet")
