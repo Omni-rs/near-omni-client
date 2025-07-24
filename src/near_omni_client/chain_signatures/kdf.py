@@ -97,7 +97,7 @@ class Kdf:
 
     @staticmethod
     def get_derived_public_key(account_id: str, path: str, network: str) -> bytes:
-        """Calculates the derived public key given a NEAR account, a derivation path and the network.
+        """Calculate the derived public key given a NEAR account, a derivation path and the network.
         The function uses the constant root public key for the given network.
 
         :param account_id: The NEAR account identifier.

@@ -5,7 +5,7 @@ from near_omni_client.wallets import Wallet
 
 
 class USDCContract:
-    """addresses obtained from:
+    """Addresses obtained from:
     - testnet: https://developers.circle.com/stablecoins/usdc-on-test-networks
     - mainnet: https://developers.circle.com/stablecoins/usdc-on-main-networks
     """

@@ -18,10 +18,7 @@ def get_evm_address(public_key: bytes) -> str:
     :return: Ethereum address as a hex string (prefixed with "0x")
     """
     # Drop the 0x04 prefix if present
-    if public_key[0] == 0x04:
-        pubkey_no_prefix = public_key[1:]
-    else:
-        pubkey_no_prefix = public_key
+    pubkey_no_prefix = public_key[1:] if public_key[0] == 4 else public_key
 
     # Calcula el hash Keccak directamente sobre los datos
     hash_bytes = keccak(pubkey_no_prefix)
@@ -30,7 +27,7 @@ def get_evm_address(public_key: bytes) -> str:
 
 
 def get_btc_legacy_address(public_key: bytes, network: str = "bitcoin") -> str:
-    """Computes the Bitcoin legacy (P2PKH) address from a public key.
+    """Compute the Bitcoin legacy (P2PKH) address from a public key.
 
     Steps:
       1. Compute SHA256, then RIPEMD160 of the public key.
@@ -55,7 +52,7 @@ def get_btc_legacy_address(public_key: bytes, network: str = "bitcoin") -> str:
 
 
 def get_btc_segwit_address(public_key: bytes, network: str = "bitcoin") -> str:
-    """Computes the Bitcoin SegWit (P2WPKH) address from a public key.
+    """Compute the Bitcoin SegWit (P2WPKH) address from a public key.
 
     Steps:
       1. Compute SHA256, then RIPEMD160 of the public key.

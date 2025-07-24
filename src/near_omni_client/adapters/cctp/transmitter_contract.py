@@ -5,6 +5,9 @@ from near_omni_client.wallets import Wallet
 
 
 class TransmitterContract:
+    """Transmitter contract for handling cross-chain messages.
+    """
+
     # addresses obtained from https://developers.circle.com/stablecoins/evm-smart-contracts
     contract_addresses = {
         Network.BASE_SEPOLIA: Web3.to_checksum_address(
@@ -48,6 +51,7 @@ class TransmitterContract:
 
     @staticmethod
     def get_address_for_network(network) -> str:
+        """Get the contract address for the specified network."""
         result = TransmitterContract.contract_addresses.get(network)
         if not result:
             raise ValueError(f"Unsupported network: {network}")

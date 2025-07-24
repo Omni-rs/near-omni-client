@@ -7,6 +7,8 @@ from .types import KeySize, KeyType
 
 
 class PublicKey:
+    """Represents a NEAR public key."""
+
     def __init__(self, key_type: KeyType, data: bytes):
         if key_type == KeyType.ED25519:
             if len(data) != KeySize.PUBLIC_KEY:
@@ -22,6 +24,7 @@ class PublicKey:
 
     @staticmethod
     def from_string(encoded_key: str) -> "PublicKey":
+        """Create a PublicKey instance from a string representation."""
         parts = encoded_key.split(":")
         if len(parts) == 1:
             raw_key = parts[0]
@@ -36,9 +39,11 @@ class PublicKey:
             raise ValueError("Invalid key format")
 
     def to_string(self) -> str:
+        """Convert the public key to a string representation."""
         return f"{self.key_type.value}:{b58encode(self.data).decode()}"
 
     def verify(self, message: bytes, signature: bytes) -> bool:
+        """Verify a signature against the public key."""
         if self._key_type == KeyType.ED25519:
             try:
                 VerifyKey(self._data).verify(message, signature)
@@ -58,13 +63,11 @@ class PublicKey:
 
     @staticmethod
     def parse_key_type(s: str) -> KeyType:
-        """Convert a string to a KeyType enum.
-        Accepts 'ed25519' or 'secp256k1' (case-insensitive).
-        """
+        """Convert a string to a KeyType enum. Accepts 'ed25519' or 'secp256k1' (case-insensitive)."""
         try:
             return KeyType(s.lower())
-        except ValueError:
-            raise ValueError(f"Unknown key type: {s}")
+        except ValueError as err:
+            raise ValueError(f"Unknown key type: {s}") from err
 
     @property
     def key_type(self) -> KeyType:

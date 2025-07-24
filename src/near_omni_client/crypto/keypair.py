@@ -4,8 +4,11 @@ from .keypair_secp256k1 import KeyPairSecp256k1
 
 
 class KeyPair:
+    """Factory class for creating NEAR key pairs of different types."""
+
     @staticmethod
     def from_random(curve: str) -> KeyPairBase:
+        """Create a random key pair for the specified curve."""
         curve = curve.lower()
         if curve == "ed25519":
             return KeyPairEd25519.from_random()
@@ -16,6 +19,7 @@ class KeyPair:
 
     @staticmethod
     def from_string(encoded: str) -> KeyPairBase:
+        """Create a KeyPair instance from a string representation."""
         parts = encoded.split(":")
         if len(parts) != 2:
             raise ValueError("Invalid encoded key format, must be <curve>:<encoded key>")

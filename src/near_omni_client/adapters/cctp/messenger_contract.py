@@ -51,6 +51,7 @@ class MessengerContract:
 
     @staticmethod
     def get_address_for_network(network) -> str:
+        """Get the contract address for the specified network."""
         result = MessengerContract.contract_addresses.get(network)
         if not result:
             raise ValueError(f"Unsupported network: {network}")

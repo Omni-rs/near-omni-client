@@ -10,7 +10,8 @@ from .types import KeyPairString, KeySize, KeyType
 
 
 class KeyPairSecp256k1(KeyPairBase):
-    """Implements secp256k1 key pair functionality compatible with NEAR SDK:
+    """Implements secp256k1 key pair functionality compatible with NEAR SDK.
+
     - Accepts a base58-encoded secret-only (32-byte) or extended secret key (32-byte secret + 64-byte public).
     - Always derives public key from secret for consistency with SDK.
     - Serializes to `<curve>:<input-key>` (param unchanged) mimicking JS behavior.
@@ -28,6 +29,7 @@ class KeyPairSecp256k1(KeyPairBase):
 
     @staticmethod
     def from_random() -> "KeyPairSecp256k1":
+        """Generate a random key pair."""
         secret = os.urandom(KeySize.SECRET_KEY)
         priv = Secp256k1PrivateKey(secret, raw=True)
         pub_full = priv.pubkey.serialize(compressed=False)
@@ -36,6 +38,7 @@ class KeyPairSecp256k1(KeyPairBase):
         return KeyPairSecp256k1(b58encode(extended).decode())
 
     def sign(self, message: bytes) -> Signature:
+        """Sign a message using the private key."""
         # Use ecdsa_sign_recoverable to get a recoverable signature
         rec_sig = self._priv.ecdsa_sign_recoverable(message, raw=True)
         # Serialize with recovery ID
@@ -44,6 +47,7 @@ class KeyPairSecp256k1(KeyPairBase):
         return Signature(signature=sig + bytes([recid]), public_key=self._public_key)
 
     def verify(self, message: bytes, signature: bytes) -> bool:
+        """Verify a signature against the public key."""
         # Extract signature and recid
         sig_bytes, recid = signature[:-1], signature[-1]
         # Parse the signature with recovery info
@@ -55,11 +59,14 @@ class KeyPairSecp256k1(KeyPairBase):
 
     @property
     def secret_key(self) -> str:
+        """Get the secret key."""
         return self._secret_key
 
     @property
     def public_key(self) -> PublicKey:
+        """Get the public key derived from the secret key."""
         return self._public_key
 
     def to_string(self) -> KeyPairString:
+        """Convert the key pair to a string representation."""
         return KeyPairString(f"{KeyType.SECP256K1.value}:{self._extended_secret_key}")

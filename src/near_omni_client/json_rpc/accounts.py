@@ -13,6 +13,7 @@ class Accounts:
         self.provider = provider
 
     async def view_account(self, account_id: str, finality: str = "final") -> AccountResult:
+        """Fetch account information for the given account ID."""
         try:
             res = await self.provider.call(
                 "query",
