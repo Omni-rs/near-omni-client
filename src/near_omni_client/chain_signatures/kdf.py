@@ -1,4 +1,5 @@
 from hashlib import sha3_256
+from typing import ClassVar
 
 from base58 import b58decode
 from ecdsa import SECP256k1
@@ -8,13 +9,15 @@ from .constants import EPSILON_DERIVATION_PREFIX, ROOT_PUBLIC_KEY_MAINNET, ROOT_
 
 
 class Kdf:
+    """Key Derivation Function (KDF) for NEAR MPC recovery."""
+
     EPSILON_PREFIX = EPSILON_DERIVATION_PREFIX
 
-    PUBLIC_KEYS = {"mainnet": ROOT_PUBLIC_KEY_MAINNET, "testnet": ROOT_PUBLIC_KEY_TESTNET}
+    PUBLIC_KEYS: ClassVar[dict[str, str]] = {"mainnet": ROOT_PUBLIC_KEY_MAINNET, "testnet": ROOT_PUBLIC_KEY_TESTNET}
 
     @staticmethod
     def get_root_public_key(network: str = "mainnet") -> str:
-        """Returns the root public key according to the network.
+        """Return the root public key according to the network.
 
         :param network: "mainnet" or "testnet" (case insensitive)
         :return: The root public key string.
@@ -45,7 +48,7 @@ class Kdf:
 
     @staticmethod
     def derive_public_key(root_public_key_str: str, epsilon: int) -> bytes:
-        """Derives a new public key from a root public key and an epsilon value.
+        """Derive a new public key from a root public key and an epsilon value.
 
         The root public key must be provided in the format:
             "secp256k1:<Base58 encoded 64 bytes>"
@@ -97,13 +100,16 @@ class Kdf:
 
     @staticmethod
     def get_derived_public_key(account_id: str, path: str, network: str) -> bytes:
-        """Calculate the derived public key given a NEAR account, a derivation path and the network.
-        The function uses the constant root public key for the given network.
+        """Calculate the derived public key given a NEAR account, a derivation path and the network. The function uses the constant root public key for the given network.
 
-        :param account_id: The NEAR account identifier.
-        :param path: The derivation path.
-        :param network: "mainnet" or "testnet".
-        :return: The derived public key as bytes (uncompressed, 65 bytes).
+        Args:
+            account_id: The NEAR account identifier.
+            path: The derivation path.
+            network: "mainnet" or "testnet".
+
+        Returns:
+            The derived public key as bytes (uncompressed, 65 bytes).
+
         """
         root_public_key_str = Kdf.get_root_public_key(network)
         epsilon = Kdf.derive_epsilon(account_id, path)

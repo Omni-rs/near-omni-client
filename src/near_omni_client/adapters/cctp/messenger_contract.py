@@ -5,6 +5,8 @@ from near_omni_client.wallets import Wallet
 
 
 class MessengerContract:
+    """Class to interact with the Circle Cross-Chain Transfer Protocol (CCTP) Messenger contract."""
+
     # addresses obtained from https://developers.circle.com/stablecoins/evm-smart-contracts
     contract_addresses = {
         Network.BASE_SEPOLIA: Web3.to_checksum_address(

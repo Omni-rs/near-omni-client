@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from web3 import Web3
 
 from near_omni_client.networks import Network
@@ -5,8 +7,10 @@ from near_omni_client.wallets import Wallet
 
 
 class LendingPool:
+    """AAVE Lending Pool contract for managing deposits and withdrawals of assets."""
+
     # addresses obtained from https://aave.com/docs/resources/addresses
-    contract_addresses = {
+    contract_addresses: ClassVar[dict[Network, str]] = {
         Network.ETHEREUM_MAINNET: Web3.to_checksum_address(
             "0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2"
         ),  # https://github.com/bgd-labs/aave-address-book/blob/main/src/AaveV3Ethereum.sol

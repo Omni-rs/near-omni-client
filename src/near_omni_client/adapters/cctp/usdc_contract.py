@@ -1,3 +1,4 @@
+
 from web3 import Web3
 
 from near_omni_client.networks import Network
@@ -50,6 +51,7 @@ class USDCContract:
 
     @staticmethod
     def get_address_for_network(network) -> str:
+        """Get the USDC contract address for a specific network."""
         address = USDCContract.contract_addresses.get(network)
         if not address:
             raise ValueError(f"Unsupported network: {network}")
@@ -58,6 +60,7 @@ class USDCContract:
     def approve(
         self, spender: str, amount: int, gas_limit: int = 1000000, wait: bool = True
     ) -> str:
+        """Approve a spender to use USDC tokens on behalf of the wallet."""
         tx = self.contract.functions.approve(spender, amount).build_transaction(
             {
                 "from": self.wallet.get_wallet_address(),

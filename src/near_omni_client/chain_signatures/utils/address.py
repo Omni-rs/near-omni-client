@@ -7,7 +7,7 @@ from near_omni_client.chain_signatures.segwit_addr import bech32_encode, convert
 
 
 def get_evm_address(public_key: bytes) -> str:
-    """Computes the Ethereum address from an uncompressed public key.
+    """Compute the Ethereum address from an uncompressed public key.
 
     The public key is expected to be 65 bytes with a leading 0x04.
     According to Ethereum specifications, the 0x04 is dropped and the
