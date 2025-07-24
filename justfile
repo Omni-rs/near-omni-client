@@ -1,3 +1,6 @@
+set dotenv-load
+set export
+
 setup-dev:
 	uv sync --all-extras --dev
 	uv pip install -e .
@@ -28,3 +31,6 @@ format-check:
 
 run-example example:
     uv run python -m examples.{{example}}
+
+anvil-fork:
+    anvil --fork-url $NETWORK_URL --fork-block-number $BLOCK_NUMBER
