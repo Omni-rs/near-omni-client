@@ -22,10 +22,10 @@ class NearFactoryProvider(IProviderFactory):
             raise TypeError(f"Expected Network enum, got {type(network)}")
 
         if network == Network.NEAR_TESTNET:
-            return NearClient(url=self.URL_TESTNET)
+            return NearClient(provider_url=self.URL_TESTNET)
 
         if network == Network.NEAR_MAINNET:
-            return NearClient(url=self.URL_MAINNET)
+            return NearClient(provider_url=self.URL_MAINNET)
 
     def is_network_supported(self, network: Network) -> bool:
         """Check if the network is supported by the Near provider."""
