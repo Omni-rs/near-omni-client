@@ -960,7 +960,7 @@ wheels = [
 
 [[package]]
 name = "near-omni-client"
-version = "0.1.5"
+version = "0.1.6"
 source = { virtual = "." }
 dependencies = [
     { name = "base58" },
