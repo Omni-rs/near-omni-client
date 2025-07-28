@@ -242,11 +242,11 @@ class LendingPool:
         return slope_ray / 1e27 * 100
 
     def get_supply_and_borrow(self, asset_address: str) -> tuple[int, int]:
-        """
-        Return the total supply and total borrow for a given asset.
+        """Return the total supply and total borrow for a given asset.
 
         Returns:
             (total_supply, total_borrow): both in base units (e.g. wei)
+
         """
         w3 = self.wallet.get_web3(self.network)
 
