@@ -220,17 +220,12 @@ class LendingPool:
         variable_debt_token = reserve_data[10]
         strategy_address = reserve_data[11]
 
-        print(
-            f"asset_address: {asset_address}, a_token: {a_token}, variable_debt_token: {variable_debt_token}, strategy_address: {strategy_address}"
-        )
-
         # get real balances
         a_token_contract = w3.eth.contract(address=a_token, abi=self.erc20_abi)
         debt_token_contract = w3.eth.contract(address=variable_debt_token, abi=self.erc20_abi)
 
         available_liquidity = a_token_contract.functions.balanceOf(self.contract_address).call()
         total_borrow = debt_token_contract.functions.totalSupply().call()
-        print(f"available_liquidity: {available_liquidity}, total_borrow: {total_borrow}")
 
         # get strategy data
         strategy = w3.eth.contract(address=strategy_address, abi=self.interest_rate_strategy_abi)
@@ -245,6 +240,30 @@ class LendingPool:
 
         slope_ray = slope1_ray if usage_ratio <= optimal else slope2_ray
         return slope_ray / 1e27 * 100
+
+    def get_supply_and_borrow(self, asset_address: str) -> tuple[int, int]:
+        """
+        Return the total supply and total borrow for a given asset.
+
+        Returns:
+            (total_supply, total_borrow): both in base units (e.g. wei)
+        """
+        w3 = self.wallet.get_web3(self.network)
+
+        contract = w3.eth.contract(address=self.contract_address, abi=self.abi)
+        reserve_data = contract.functions.getReserveData(asset_address).call()
+
+        a_token = reserve_data[8]
+        variable_debt_token = reserve_data[10]
+
+        a_token_contract = w3.eth.contract(address=a_token, abi=self.erc20_abi)
+        debt_token_contract = w3.eth.contract(address=variable_debt_token, abi=self.erc20_abi)
+
+        available_liquidity = a_token_contract.functions.balanceOf(self.contract_address).call()
+        total_borrow = debt_token_contract.functions.totalSupply().call()
+        total_supply = available_liquidity + total_borrow
+
+        return total_supply, total_borrow
 
     def supply(
         self,
