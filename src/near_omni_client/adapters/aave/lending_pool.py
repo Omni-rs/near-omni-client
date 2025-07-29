@@ -26,6 +26,18 @@ class LendingPool:
         Network.LOCALHOST: Web3.to_checksum_address(
             "0xA238Dd80C259a72e81d7e4664a9801593F98d1c5"  # we use base mainnet address for local fork testing
         ),
+        Network.OPTIMISM_SEPOLIA: Web3.to_checksum_address(
+            "0xb50201558B00496A145fE76f7424749556E326D8"  # same as sepolia
+        ),
+        Network.OPTIMISM_MAINNET: Web3.to_checksum_address(
+            "0x794a61358D6845594F94dc1DB02A252b5b4814aD"  # same as mainnet
+        ),
+        Network.ARBITRUM_SEPOLIA: Web3.to_checksum_address(
+            "0xBfC91D59fdAA134A4ED45f7B584cAf96D7792Eff"  # same as sepolia
+        ),
+        Network.ARBITRUM_MAINNET: Web3.to_checksum_address(
+            "0x794a61358D6845594F94dc1DB02A252b5b4814aD"  # same as mainnet
+        ),
     }
 
     abi = [
