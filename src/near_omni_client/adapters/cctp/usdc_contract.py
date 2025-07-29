@@ -20,6 +20,18 @@ class USDCContract:
         Network.ETHEREUM_MAINNET: Web3.to_checksum_address(
             "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
         ),
+        Network.OPTIMISM_SEPOLIA: Web3.to_checksum_address(
+            "0x5fd84259d66Cd46123540766Be93DFE6D43130D7"
+        ),
+        Network.OPTIMISM_MAINNET: Web3.to_checksum_address(
+            "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85"
+        ),
+        Network.ARBITRUM_SEPOLIA: Web3.to_checksum_address(
+            "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d"
+        ),  
+        Network.ARBITRUM_MAINNET: Web3.to_checksum_address(
+            "0xaf88d065e77c8cC2239327C5EDb3A432268e5831"
+        ),
     }
     abi = [
         {

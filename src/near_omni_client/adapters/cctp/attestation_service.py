@@ -22,6 +22,10 @@ class AttestationService:
         Network.BASE_MAINNET: f"{MAINNET_BASE_URL}/{Network.BASE_MAINNET.domain}?transactionHash={{}}",
         Network.ETHEREUM_SEPOLIA: f"{SANDBOX_BASE_URL}/{Network.ETHEREUM_SEPOLIA.domain}?transactionHash={{}}",
         Network.ETHEREUM_MAINNET: f"{MAINNET_BASE_URL}/{Network.ETHEREUM_MAINNET.domain}?transactionHash={{}}",
+        Network.OPTIMISM_SEPOLIA: f"{SANDBOX_BASE_URL}/{Network.OPTIMISM_SEPOLIA.domain}?transactionHash={{}}",
+        Network.OPTIMISM_MAINNET: f"{MAINNET_BASE_URL}/{Network.OPTIMISM_MAINNET.domain}?transactionHash={{}}",
+        Network.ARBITRUM_SEPOLIA: f"{SANDBOX_BASE_URL}/{Network.ARBITRUM_SEPOLIA.domain}?transactionHash={{}}",
+        Network.ARBITRUM_MAINNET: f"{MAINNET_BASE_URL}/{Network.ARBITRUM_MAINNET.domain}?transactionHash={{}}",
     }
 
     def __init__(self, network: Network):

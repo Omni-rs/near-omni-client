@@ -21,6 +21,18 @@ class MessengerContract:
         Network.ETHEREUM_MAINNET: Web3.to_checksum_address(
             "0x28b5a0e9C621a5BadaA536219b3a228C8168cf5d"
         ),  # domain 0
+        Network.OPTIMISM_SEPOLIA: Web3.to_checksum_address(
+            "0x8FE6B999Dc680CcFDD5Bf7EB0974218be2542DAA"
+        ),  # domain 2
+        Network.OPTIMISM_MAINNET: Web3.to_checksum_address(
+            "0x28b5a0e9C621a5BadaA536219b3a228C8168cf5d"
+        ),  # domain 2
+        Network.ARBITRUM_SEPOLIA: Web3.to_checksum_address(
+            "0x8FE6B999Dc680CcFDD5Bf7EB0974218be2542DAA"
+        ),  # domain 3
+        Network.ARBITRUM_MAINNET: Web3.to_checksum_address(
+            "0x28b5a0e9C621a5BadaA536219b3a228C8168cf5d"
+        ),  # domain 3
     }
     abi = [
         {
