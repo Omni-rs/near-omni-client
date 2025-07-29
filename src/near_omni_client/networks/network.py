@@ -2,7 +2,8 @@ from enum import Enum
 
 BASE_DOMAIN = "6"
 ETHEREUM_DOMAIN = "0"
-
+ARBITRUM_DOMAIN = "3"
+OPTIMISM_DOMAIN = "2"
 
 class Network(Enum):
     """Enum representing different blockchain networks."""
@@ -34,5 +35,9 @@ class Network(Enum):
             return BASE_DOMAIN
         elif self in {Network.ETHEREUM_SEPOLIA, Network.ETHEREUM_MAINNET}:
             return ETHEREUM_DOMAIN
+        elif self in {Network.OPTIMISM_SEPOLIA, Network.OPTIMISM_MAINNET}:
+            return OPTIMISM_DOMAIN
+        elif self in {Network.ARBITRUM_SEPOLIA, Network.ARBITRUM_MAINNET}:
+            return ARBITRUM_DOMAIN
         else:
             raise ValueError(f"Unknown domain for network {self}")
