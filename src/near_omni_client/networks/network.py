@@ -5,6 +5,7 @@ ETHEREUM_DOMAIN = "0"
 ARBITRUM_DOMAIN = "3"
 OPTIMISM_DOMAIN = "2"
 
+
 class Network(Enum):
     """Enum representing different blockchain networks."""
 

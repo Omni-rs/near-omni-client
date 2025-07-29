@@ -26,7 +26,7 @@ class TransmitterContract:
         ),  # domain 2
         Network.OPTIMISM_MAINNET: Web3.to_checksum_address(
             "0x81D40F21F12A8F0E3252Bccb954D722d4c464B64"
-        ),  # domain 2  
+        ),  # domain 2
         Network.ARBITRUM_SEPOLIA: Web3.to_checksum_address(
             "0xE737e5cEBEEBa77EFE34D4aa090756590b1CE275"
         ),  # domain 3

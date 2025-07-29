@@ -28,7 +28,7 @@ class USDCContract:
         ),
         Network.ARBITRUM_SEPOLIA: Web3.to_checksum_address(
             "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d"
-        ),  
+        ),
         Network.ARBITRUM_MAINNET: Web3.to_checksum_address(
             "0xaf88d065e77c8cC2239327C5EDb3A432268e5831"
         ),
