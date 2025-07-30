@@ -17,6 +17,10 @@ class AlchemyFactoryProvider(IProviderFactory):
             Network.BASE_MAINNET,
             Network.ETHEREUM_SEPOLIA,
             Network.ETHEREUM_MAINNET,
+            Network.ARBITRUM_SEPOLIA,
+            Network.ARBITRUM_MAINNET,
+            Network.OPTIMISM_SEPOLIA,
+            Network.OPTIMISM_MAINNET,
         ]
 
     def get_provider(self, network: Network) -> Web3:
