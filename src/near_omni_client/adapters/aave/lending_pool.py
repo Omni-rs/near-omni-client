@@ -1,13 +1,19 @@
 from typing import ClassVar
-
+from enum import Enum
 from web3 import Web3
 
 from near_omni_client.networks import Network
 from near_omni_client.wallets import Wallet
 
 
+class IRMVersion(Enum):
+    """Interest Rate Model version used by a given Aave market."""
+    V2 = "V2"                  # DefaultReserveInterestRateStrategyV2
+    DYNAMIC_V0 = "DYNAMIC_V0"  # Testnet IRMs that do not expose slope1/slope2
+
+
 class LendingPool:
-    """AAVE Lending Pool contract for managing deposits and withdrawals of assets."""
+    """AAVE Lending Pool contract adapter with unified slope reading logic."""
 
     # addresses obtained from https://aave.com/docs/resources/addresses
     contract_addresses: ClassVar[dict[Network, str]] = {
@@ -38,6 +44,17 @@ class LendingPool:
         Network.ARBITRUM_MAINNET: Web3.to_checksum_address(
             "0x794a61358D6845594F94dc1DB02A252b5b4814aD"  # same as mainnet
         ),
+    }
+
+    irm_by_network: ClassVar[dict[Network, IRMVersion]] = {
+        Network.ETHEREUM_MAINNET: IRMVersion.V2,
+        Network.ETHEREUM_SEPOLIA: IRMVersion.V2,
+        Network.BASE_MAINNET: IRMVersion.V2,
+        Network.OPTIMISM_MAINNET: IRMVersion.V2,
+        Network.ARBITRUM_MAINNET: IRMVersion.V2,
+        Network.ARBITRUM_SEPOLIA: IRMVersion.DYNAMIC_V0,
+        Network.OPTIMISM_SEPOLIA: IRMVersion.DYNAMIC_V0,
+        Network.BASE_SEPOLIA: IRMVersion.DYNAMIC_V0,
     }
 
     abi = [
@@ -219,10 +236,21 @@ class LendingPool:
 
     def get_slope(self, asset_address: str) -> float:
         """Return the correct supply elasticity slope (as %), based on current usage ratio."""
+        irm_version = self.irm_by_network.get(self.network, IRMVersion.V2)
+
+        if irm_version == IRMVersion.V2:
+            return self._read_slopes_v2(asset_address)
+
+        if irm_version == IRMVersion.DYNAMIC_V0:
+            return self._read_slopes_dynamic_v0(asset_address)
+
+        raise NotImplementedError(f"Unsupported IRM version: {irm_version}")
+    
+
+    def _read_slopes_v2(self, asset_address: str) -> float:
         w3 = self.wallet.get_web3(self.network)
 
         contract = w3.eth.contract(address=self.contract_address, abi=self.abi)
-
         # getReserveData
         reserve_data = contract.functions.getReserveData(asset_address).call()
 
@@ -350,3 +378,36 @@ class LendingPool:
         )
 
         return self.wallet.sign_and_send_transaction(self.network, tx, wait)
+    
+    def _read_slopes_dynamic_v0(self, asset_address: str) -> float:
+        """Return slope (%) for static IRM strategy contracts (no getters)."""
+        w3 = self.wallet.get_web3(self.network)
+
+        # Step 1: read reserve data from LendingPool
+        contract = w3.eth.contract(address=self.contract_address, abi=self.abi)
+        reserve_data = contract.functions.getReserveData(asset_address).call()
+
+        # Same extraction logic as V2:
+        a_token = reserve_data[8]
+        variable_debt_token = reserve_data[10]
+
+        # Step 2: compute usage ratio
+        a_token_contract = w3.eth.contract(address=a_token, abi=self.erc20_abi)
+        debt_token_contract = w3.eth.contract(address=variable_debt_token, abi=self.erc20_abi)
+
+        available_liquidity = a_token_contract.functions.balanceOf(self.contract_address).call()
+        total_borrow = debt_token_contract.functions.totalSupply().call()
+        total_liquidity = available_liquidity + total_borrow
+
+        usage = total_borrow / total_liquidity if total_liquidity > 0 else 0.0
+
+        # Step 3: static parameters decoded from bytecode
+        optimal = 0.80     # 80%
+        slope1 = 0.06      # 6%
+        slope2 = 0.20      # 20%
+
+        # Step 4: choose slope exactly like V2 logic
+        slope = slope1 if usage <= optimal else slope2
+
+        # Step 5: return the slope as percentage, exactly like _read_slopes_v2
+        return slope * 100
