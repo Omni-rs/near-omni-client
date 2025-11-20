@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import ClassVar
 
 from web3 import Web3
@@ -6,8 +7,15 @@ from near_omni_client.networks import Network
 from near_omni_client.wallets import Wallet
 
 
+class IRMVersion(Enum):
+    """Interest Rate Model version used by a given Aave market."""
+
+    V2 = "V2"  # DefaultReserveInterestRateStrategyV2
+    V1 = "V1"  # Testnet IRMs that do not require asset parameter
+
+
 class LendingPool:
-    """AAVE Lending Pool contract for managing deposits and withdrawals of assets."""
+    """AAVE Lending Pool contract adapter with unified slope reading logic."""
 
     # addresses obtained from https://aave.com/docs/resources/addresses
     contract_addresses: ClassVar[dict[Network, str]] = {
@@ -38,6 +46,17 @@ class LendingPool:
         Network.ARBITRUM_MAINNET: Web3.to_checksum_address(
             "0x794a61358D6845594F94dc1DB02A252b5b4814aD"  # same as mainnet
         ),
+    }
+
+    irm_by_network: ClassVar[dict[Network, IRMVersion]] = {
+        Network.ETHEREUM_MAINNET: IRMVersion.V2,
+        Network.OPTIMISM_MAINNET: IRMVersion.V2,
+        Network.ARBITRUM_MAINNET: IRMVersion.V2,
+        Network.BASE_MAINNET: IRMVersion.V2,
+        Network.ETHEREUM_SEPOLIA: IRMVersion.V1,
+        Network.OPTIMISM_SEPOLIA: IRMVersion.V1,
+        Network.ARBITRUM_SEPOLIA: IRMVersion.V1,
+        Network.BASE_SEPOLIA: IRMVersion.V1,
     }
 
     abi = [
@@ -209,8 +228,8 @@ class LendingPool:
     def get_interest_rate(self, asset_address: str) -> float:
         """Return the current liquidity rate (APR %) for the given asset."""
         w3 = self.wallet.get_web3(self.network)
-        contract = w3.eth.contract(address=self.contract_address, abi=self.abi)
-        reserve_data = contract.functions.getReserveData(asset_address).call()
+        lending_pool = w3.eth.contract(address=self.contract_address, abi=self.abi)
+        reserve_data = lending_pool.functions.getReserveData(asset_address).call()
         # extract the liquidityRate from the reserve data
         # https://aave.com/docs/developers/smart-contracts/pool#view-methods-getreservedata-return-values
         liquidity_rate_ray = reserve_data[2]  # or 'currentLiquidityRate'
@@ -219,10 +238,20 @@ class LendingPool:
 
     def get_slope(self, asset_address: str) -> float:
         """Return the correct supply elasticity slope (as %), based on current usage ratio."""
+        irm_version = self.irm_by_network.get(self.network, IRMVersion.V2)
+
+        if irm_version == IRMVersion.V2:
+            return self._read_slopes_v2(asset_address)
+
+        if irm_version == IRMVersion.V1:
+            return self._read_slopes_v1(asset_address)
+
+        raise NotImplementedError(f"Unsupported IRM version: {irm_version}")
+
+    def _read_slopes_v2(self, asset_address: str) -> float:
         w3 = self.wallet.get_web3(self.network)
 
         contract = w3.eth.contract(address=self.contract_address, abi=self.abi)
-
         # getReserveData
         reserve_data = contract.functions.getReserveData(asset_address).call()
 
@@ -350,3 +379,63 @@ class LendingPool:
         )
 
         return self.wallet.sign_and_send_transaction(self.network, tx, wait)
+
+    def _read_slopes_v1(self, asset_address: str) -> float:
+        """Return slope (%) for static IRM strategy contracts (no getters)."""
+        w3 = self.wallet.get_web3(self.network)
+        contract = w3.eth.contract(address=self.contract_address, abi=self.abi)
+        # Reserve data
+        reserve_data = contract.functions.getReserveData(asset_address).call()
+
+        # extract the aToken, variableDebtToken and strategy address from the reserve data
+        # https://aave.com/docs/developers/smart-contracts/pool#view-methods-getreservedata-return-values
+        a_token = reserve_data[8]
+        variable_debt_token = reserve_data[10]
+        strategy_address = reserve_data[11]
+
+        # Compute usage ratio
+        a_token_contract = w3.eth.contract(address=a_token, abi=self.erc20_abi)
+        debt_token_contract = w3.eth.contract(address=variable_debt_token, abi=self.erc20_abi)
+
+        available_liquidity = a_token_contract.functions.balanceOf(self.contract_address).call()
+        total_borrow = debt_token_contract.functions.totalSupply().call()
+        total_liquidity = available_liquidity + total_borrow
+        usage_ratio = total_borrow / total_liquidity if total_liquidity > 0 else 0.0
+
+        # V1 ABI
+        strategy = w3.eth.contract(
+            address=strategy_address,
+            abi=[
+                {
+                    "name": "getVariableRateSlope1",
+                    "inputs": [],
+                    "outputs": [{"type": "uint256"}],
+                    "stateMutability": "view",
+                    "type": "function",
+                },
+                {
+                    "name": "getVariableRateSlope2",
+                    "inputs": [],
+                    "outputs": [{"type": "uint256"}],
+                    "stateMutability": "view",
+                    "type": "function",
+                },
+                {
+                    "name": "OPTIMAL_USAGE_RATIO",
+                    "inputs": [],
+                    "outputs": [{"type": "uint256"}],
+                    "stateMutability": "view",
+                    "type": "function",
+                },
+            ],
+        )
+
+        slope1_ray = strategy.functions.getVariableRateSlope1().call()
+        slope2_ray = strategy.functions.getVariableRateSlope2().call()
+        optimal_ray = strategy.functions.OPTIMAL_USAGE_RATIO().call()
+
+        # Same logic as V2
+        optimal = optimal_ray / 1e27
+        slope_ray = slope1_ray if usage_ratio <= optimal else slope2_ray
+
+        return slope_ray / 1e27 * 100

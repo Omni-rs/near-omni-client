@@ -6,6 +6,7 @@ from pydantic import ValidationError
 from near_omni_client.networks import Network
 
 from .fee_service_types import (
+    Fee,
     GetFeeResponse,
     GetFeesBadRequestResponse,
     GetFeesNotFoundResponse,
@@ -18,14 +19,14 @@ class FeeService:
     MAINNET_BASE_URL = "https://iris-api.circle.com/v2/burn/USDC/fees"
     SANDBOX_BASE_URL = "https://iris-api-sandbox.circle.com/v2/burn/USDC/fees"
     network_urls = {
-        Network.BASE_SEPOLIA: f"{SANDBOX_BASE_URL}/{Network.BASE_SEPOLIA.domain}/{{}}/{{}}",
-        Network.BASE_MAINNET: f"{MAINNET_BASE_URL}/{Network.BASE_MAINNET.domain}/{{}}/{{}}",
-        Network.ETHEREUM_SEPOLIA: f"{SANDBOX_BASE_URL}/{Network.ETHEREUM_SEPOLIA.domain}/{{}}/{{}}",
-        Network.ETHEREUM_MAINNET: f"{MAINNET_BASE_URL}/{Network.ETHEREUM_MAINNET.domain}/{{}}/{{}}",
-        Network.OPTIMISM_SEPOLIA: f"{SANDBOX_BASE_URL}/{Network.OPTIMISM_SEPOLIA.domain}/{{}}/{{}}",
-        Network.OPTIMISM_MAINNET: f"{MAINNET_BASE_URL}/{Network.OPTIMISM_MAINNET.domain}/{{}}/{{}}",
-        Network.ARBITRUM_SEPOLIA: f"{SANDBOX_BASE_URL}/{Network.ARBITRUM_SEPOLIA.domain}/{{}}/{{}}",
-        Network.ARBITRUM_MAINNET: f"{MAINNET_BASE_URL}/{Network.ARBITRUM_MAINNET.domain}/{{}}/{{}}",
+        Network.BASE_SEPOLIA: f"{SANDBOX_BASE_URL}/{Network.BASE_SEPOLIA.domain}/{{}}",
+        Network.BASE_MAINNET: f"{MAINNET_BASE_URL}/{Network.BASE_MAINNET.domain}/{{}}",
+        Network.ETHEREUM_SEPOLIA: f"{SANDBOX_BASE_URL}/{Network.ETHEREUM_SEPOLIA.domain}/{{}}",
+        Network.ETHEREUM_MAINNET: f"{MAINNET_BASE_URL}/{Network.ETHEREUM_MAINNET.domain}/{{}}",
+        Network.OPTIMISM_SEPOLIA: f"{SANDBOX_BASE_URL}/{Network.OPTIMISM_SEPOLIA.domain}/{{}}",
+        Network.OPTIMISM_MAINNET: f"{MAINNET_BASE_URL}/{Network.OPTIMISM_MAINNET.domain}/{{}}",
+        Network.ARBITRUM_SEPOLIA: f"{SANDBOX_BASE_URL}/{Network.ARBITRUM_SEPOLIA.domain}/{{}}",
+        Network.ARBITRUM_MAINNET: f"{MAINNET_BASE_URL}/{Network.ARBITRUM_MAINNET.domain}/{{}}",
     }
 
     def __init__(self, network: Network):
@@ -34,17 +35,15 @@ class FeeService:
         if not self.url:
             raise ValueError(f"Unsupported network: {network}")
 
-    def get_fees(
-        self, source_domain_id: int, destination_domain_id: int, finality_threshold: int = 1000
-    ) -> GetFeeResponse:
+    def get_fees(self, destination_domain_id: int, finality_threshold: int = 1000) -> Fee:
         """Retrieve fees for a given source and destination domain ID."""
-        url = self.url.format(source_domain_id, destination_domain_id)
+        url = self.url.format(destination_domain_id)
         print(f"Retrieving fees from {url}")
         if not self.url:
             raise ValueError(f"Unsupported network: {self.network}")
 
-        if not source_domain_id or not destination_domain_id:
-            raise ValueError("Source and destination domain IDs are required")
+        if not destination_domain_id:
+            raise ValueError("Destination domain ID is required")
 
         # Allowed finalities according to Circle
         allowed_finalities = {1000, 2000}
@@ -64,8 +63,9 @@ class FeeService:
                     try:
                         print("Response received (200)")
                         print(f"Response: {response.text}")
-                        data = GetFeeResponse(**response.json())
-                        for fee in data.data:
+                        parsed = GetFeeResponse.model_validate(response.json())
+                        fees = parsed.root
+                        for fee in fees:
                             if fee.finalityThreshold == finality_threshold:
                                 print(f"Selected fee for finality {finality_threshold}: {fee}")
                                 return fee
