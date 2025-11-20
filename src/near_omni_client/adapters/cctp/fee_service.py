@@ -9,6 +9,7 @@ from .fee_service_types import (
     GetFeeResponse,
     GetFeesBadRequestResponse,
     GetFeesNotFoundResponse,
+    Fee
 )
 
 
@@ -36,7 +37,7 @@ class FeeService:
 
     def get_fees(
         self, destination_domain_id: int, finality_threshold: int = 1000
-    ) -> GetFeeResponse:
+    ) -> Fee:
         """Retrieve fees for a given source and destination domain ID."""
         url = self.url.format(destination_domain_id)
         print(f"Retrieving fees from {url}")
@@ -64,8 +65,9 @@ class FeeService:
                     try:
                         print("Response received (200)")
                         print(f"Response: {response.text}")
-                        data = GetFeeResponse(**response.json())
-                        for fee in data.data:
+                        parsed = GetFeeResponse.model_validate(response.json())
+                        fees = parsed.root
+                        for fee in fees:
                             if fee.finalityThreshold == finality_threshold:
                                 print(f"Selected fee for finality {finality_threshold}: {fee}")
                                 return fee
