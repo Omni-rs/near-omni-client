@@ -6,10 +6,10 @@ from pydantic import ValidationError
 from near_omni_client.networks import Network
 
 from .fee_service_types import (
+    Fee,
     GetFeeResponse,
     GetFeesBadRequestResponse,
     GetFeesNotFoundResponse,
-    Fee
 )
 
 
@@ -35,9 +35,7 @@ class FeeService:
         if not self.url:
             raise ValueError(f"Unsupported network: {network}")
 
-    def get_fees(
-        self, destination_domain_id: int, finality_threshold: int = 1000
-    ) -> Fee:
+    def get_fees(self, destination_domain_id: int, finality_threshold: int = 1000) -> Fee:
         """Retrieve fees for a given source and destination domain ID."""
         url = self.url.format(destination_domain_id)
         print(f"Retrieving fees from {url}")

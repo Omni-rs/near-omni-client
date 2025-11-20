@@ -1,5 +1,6 @@
-from typing import ClassVar
 from enum import Enum
+from typing import ClassVar
+
 from web3 import Web3
 
 from near_omni_client.networks import Network
@@ -8,6 +9,7 @@ from near_omni_client.wallets import Wallet
 
 class IRMVersion(Enum):
     """Interest Rate Model version used by a given Aave market."""
+
     V2 = "V2"  # DefaultReserveInterestRateStrategyV2
     V1 = "V1"  # Testnet IRMs that do not require asset parameter
 
@@ -51,7 +53,6 @@ class LendingPool:
         Network.OPTIMISM_MAINNET: IRMVersion.V2,
         Network.ARBITRUM_MAINNET: IRMVersion.V2,
         Network.BASE_MAINNET: IRMVersion.V2,
-
         Network.ETHEREUM_SEPOLIA: IRMVersion.V1,
         Network.OPTIMISM_SEPOLIA: IRMVersion.V1,
         Network.ARBITRUM_SEPOLIA: IRMVersion.V1,
@@ -238,7 +239,7 @@ class LendingPool:
     def get_slope(self, asset_address: str) -> float:
         """Return the correct supply elasticity slope (as %), based on current usage ratio."""
         irm_version = self.irm_by_network.get(self.network, IRMVersion.V2)
-        
+
         if irm_version == IRMVersion.V2:
             return self._read_slopes_v2(asset_address)
 
@@ -246,7 +247,6 @@ class LendingPool:
             return self._read_slopes_v1(asset_address)
 
         raise NotImplementedError(f"Unsupported IRM version: {irm_version}")
-    
 
     def _read_slopes_v2(self, asset_address: str) -> float:
         w3 = self.wallet.get_web3(self.network)
@@ -379,14 +379,14 @@ class LendingPool:
         )
 
         return self.wallet.sign_and_send_transaction(self.network, tx, wait)
-    
+
     def _read_slopes_v1(self, asset_address: str) -> float:
         """Return slope (%) for static IRM strategy contracts (no getters)."""
         w3 = self.wallet.get_web3(self.network)
         contract = w3.eth.contract(address=self.contract_address, abi=self.abi)
         # Reserve data
         reserve_data = contract.functions.getReserveData(asset_address).call()
-        
+
         # extract the aToken, variableDebtToken and strategy address from the reserve data
         # https://aave.com/docs/developers/smart-contracts/pool#view-methods-getreservedata-return-values
         a_token = reserve_data[8]
@@ -403,29 +403,32 @@ class LendingPool:
         usage_ratio = total_borrow / total_liquidity if total_liquidity > 0 else 0.0
 
         # V1 ABI
-        strategy = w3.eth.contract(address=strategy_address, abi=[
-            {
-                "name": "getVariableRateSlope1",
-                "inputs": [],
-                "outputs": [{"type": "uint256"}],
-                "stateMutability": "view",
-                "type": "function",
-            },
-            {
-                "name": "getVariableRateSlope2",
-                "inputs": [],
-                "outputs": [{"type": "uint256"}],
-                "stateMutability": "view",
-                "type": "function",
-            },
-            {
-                "name": "OPTIMAL_USAGE_RATIO",
-                "inputs": [],
-                "outputs": [{"type": "uint256"}],
-                "stateMutability": "view",
-                "type": "function",
-            },
-        ])
+        strategy = w3.eth.contract(
+            address=strategy_address,
+            abi=[
+                {
+                    "name": "getVariableRateSlope1",
+                    "inputs": [],
+                    "outputs": [{"type": "uint256"}],
+                    "stateMutability": "view",
+                    "type": "function",
+                },
+                {
+                    "name": "getVariableRateSlope2",
+                    "inputs": [],
+                    "outputs": [{"type": "uint256"}],
+                    "stateMutability": "view",
+                    "type": "function",
+                },
+                {
+                    "name": "OPTIMAL_USAGE_RATIO",
+                    "inputs": [],
+                    "outputs": [{"type": "uint256"}],
+                    "stateMutability": "view",
+                    "type": "function",
+                },
+            ],
+        )
 
         slope1_ray = strategy.functions.getVariableRateSlope1().call()
         slope2_ray = strategy.functions.getVariableRateSlope2().call()

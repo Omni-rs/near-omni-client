@@ -1,4 +1,4 @@
-from pydantic import BaseModel,RootModel
+from pydantic import BaseModel, RootModel
 
 
 class Fee(BaseModel):
@@ -10,6 +10,7 @@ class Fee(BaseModel):
 
 class GetFeeResponse(RootModel[list[Fee]]):
     """Response model for getting fees from the fee service."""
+
     pass
 
 
