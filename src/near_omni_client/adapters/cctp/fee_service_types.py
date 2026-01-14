@@ -5,7 +5,7 @@ class Fee(BaseModel):
     """Model representing a fee in the fee service."""
 
     finalityThreshold: int
-    minimumFee: int
+    minimumFee: float
 
 
 class GetFeeResponse(RootModel[list[Fee]]):
